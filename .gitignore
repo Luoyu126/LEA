@@ -1,0 +1,8 @@
+# build outputs (regenerate with harness/run_all.py or harness/build.ps1)
+harness/bench.exe
+harness/bench
+harness/kernels.S
+harness/kernels.h
+harness/kernels.json
+__pycache__/
+*.pyc

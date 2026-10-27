@@ -1,0 +1,18 @@
+<section id="limits" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; padding:128px 128px 160px; background:#f3f5f7">
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:700; line-height:1.1; color:#13171d">AI use</h2>
+  <div style="display:grid; gap:32px; grid-template-columns:1fr">
+    <div style="display:flex; flex-direction:column; gap:20px; padding:36px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
+      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">What the AI got wrong</h3>
+      <ul style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">
+        <li>Its explanation of our result: “three address parts are slow”.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:16px; padding:32px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
+    <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">Where we went further than the AI</h3>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">We didn’t accept “the number of parts matters”. We insisted on testing <span style="color:#13171d"><b>index + disp</b></span> on its own: <span style="color:#13171d"><b>lea rax,[rax*1+0]</b></span> has only two parts, yet takes <span style="color:#b4461a"><b>2 cycles</b></span> on E-cores. Enumerating every combination showed the real rule: index and displacement together.</p>
+  </div>
+  <p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+  <p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">7 / 8</p>
+  <aside>On AI use: the plan was drafted with an LLM, and it carried outdated Skylake-era rules, which sanity checks and uops.info caught. The AI also explained our result as "three address parts are slow". We didn't accept that; we insisted on testing index plus displacement on its own, and on enumerating every combination. The two-part form lea rax,[rax*1+0] is still slow, which made the real rule clear: index and displacement together.</aside>
+</section>

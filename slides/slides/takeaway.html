@@ -1,0 +1,12 @@
+<section id="takeaway" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between">
+<div style="position:absolute;left:0px;top:0px;width:24px;height:1080px;background:#D9581F"></div>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#B4461A">Takeaway</p>
+<div style="display:flex;flex-direction:column;gap:40px">
+<h2 style="font-size:104px;font-weight:700;line-height:1.05;color:#13171D">A displacement of zero is not free.</h2>
+<p style="font-size:40px;line-height:1.35;color:#4A5361">On Intel E-cores, any LEA with both an index and a displacement takes 2 cycles instead of 1, whatever the values. The P-core on the same chip doesn’t care.</p>
+</div>
+<p style="font-size:32px;font-weight:600;color:#13171D">Same chip, same instruction, different answer. Questions?</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">8 / 8</p>
+<aside>To sum up: equivalent instructions can differ in time only because of the addressing mode. On E-cores, index plus displacement costs an extra cycle regardless of values or length. The P-core handles every form in one cycle. Which forms are slow depends on the core design, which is why we pinned each measurement to one core type.</aside>
+</section>

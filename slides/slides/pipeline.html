@@ -1,0 +1,61 @@
+<section id="pipeline" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:112px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;gap:24px;align-items:center">
+<h2 style="font-size:64px;font-weight:700;line-height:1.1">Our proposed pipelines, cycle by cycle</h2>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#4A5361;border:1px solid #9AA3AE;border-radius:999px;padding:6px 20px">hypothesis</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FBFCFD;border:1px solid #D9DEE4;border-left:8px solid #2563C4;border-radius:16px;padding:28px 40px">
+<p style="font-size:32px;font-weight:600">P-core (Lion Cove): <span style="color:#2563C4">one cycle, three inputs</span></p>
+<div style="display:flex;gap:20px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#E6EAEF;border-radius:8px;padding:4px 16px">base</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#E6EAEF;border-radius:8px;padding:4px 16px">index</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#FBE6DC;color:#B4461A;border-radius:8px;padding:4px 16px">disp</p>
+</div>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#9AA3AE"></x-shape>
+<div style="display:flex;flex-direction:column;gap:10px;background:#E3ECFA;border:2px dashed #2563C4;border-radius:12px;padding:16px 24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#2563C4">cycle 1</p>
+<div style="display:flex;gap:14px;align-items:center">
+<p style="font-size:28px;font-weight:600;background:#FBFCFD;border:2px solid #2563C4;border-radius:8px;padding:10px 20px">3-to-2 compress</p>
+<x-shape kind="arrow-right" style="width:44px;height:24px;background:#2563C4"></x-shape>
+<p style="font-size:28px;font-weight:600;background:#FBFCFD;border:2px solid #2563C4;border-radius:8px;padding:10px 20px">add</p>
+</div>
+</div>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#9AA3AE"></x-shape>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;font-weight:600;background:#13171D;color:#F3F5F7;border-radius:8px;padding:10px 20px">result</p>
+<div style="flex:1"></div>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#2563C4">1 cycle</p>
+</div>
+<p style="font-size:24px;color:#4A5361">All three parts enter together; a missing part is fed in as 0. Every addressing form finishes in cycle 1.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FBFCFD;border:1px solid #D9DEE4;border-left:8px solid #D9581F;border-radius:16px;padding:28px 40px">
+<p style="font-size:32px;font-weight:600">E-core (Skymont, Crestmont): <span style="color:#B4461A">two inputs per cycle</span></p>
+<div style="display:flex;gap:20px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:8px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#E6EAEF;border-radius:8px;padding:4px 16px">base</p>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#E6EAEF;border-radius:8px;padding:4px 16px">index</p>
+</div>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#9AA3AE"></x-shape>
+<div style="display:flex;flex-direction:column;gap:10px;background:#FCEBE2;border:2px dashed #D9581F;border-radius:12px;padding:16px 24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B4461A">cycle 1</p>
+<p style="font-size:28px;font-weight:600;background:#FBFCFD;border:2px solid #D9581F;border-radius:8px;padding:10px 20px">add</p>
+</div>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#9AA3AE"></x-shape>
+<div style="display:flex;flex-direction:column;gap:10px;background:#FCEBE2;border:2px dashed #D9581F;border-radius:12px;padding:16px 24px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B4461A">cycle 2</p>
+<div style="display:flex;gap:14px;align-items:center">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#FBE6DC;color:#B4461A;border-radius:8px;padding:10px 16px">disp</p>
+<x-shape kind="arrow-right" style="width:44px;height:24px;background:#D9581F"></x-shape>
+<p style="font-size:28px;font-weight:600;background:#FBFCFD;border:2px solid #D9581F;border-radius:8px;padding:10px 20px">add</p>
+</div>
+</div>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#9AA3AE"></x-shape>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;font-weight:600;background:#13171D;color:#F3F5F7;border-radius:8px;padding:10px 20px">result</p>
+<div style="flex:1"></div>
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#B4461A">2 cycles</p>
+</div>
+<p style="font-size:24px;color:#4A5361">Index and disp share one adder input. Any two parts finish in cycle 1; index + disp together need cycle 2, even when disp = 0.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">4 / 8</p>
+<aside>This sketches the pipelines our hypothesis predicts, cycle by cycle; the test after the method slide checks it. On the P-core, a three-input adder takes base, index and displacement at once: a 3-to-2 compressor reduces three numbers to two, then one add, all in one cycle. On the E-core, the adder takes two inputs per cycle, and the index and displacement compete for the same one. Base plus index is added in cycle 1, then the displacement is added in cycle 2. Because the decoder routes by encoding, a zero displacement still takes the second cycle.</aside>
+</section>

@@ -1,0 +1,487 @@
+<title>Adding Zero to an LEA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~68ch) with wider "plates" for figures, tables and byte diagrams;
+   the three core types keep the same colors as the matplotlib figures throughout. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #15181d;
+  --ink-2: #4a505a;
+  --muted: #7b828d;
+  --rule: #dfe2e7;
+  --code-bg: #eef0f4;
+  --p: #2a78d6;
+  --e: #eb6834;
+  --lpe: #1baf7a;
+  --slow: #d9541f;
+  --slow-bg: #fbe6dc;
+  --plate: #fcfcfb;
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317; --surface: #191c21; --ink: #e9ebef; --ink-2: #b4bac4; --muted: #8a919c;
+    --rule: #2c3038; --code-bg: #20242b; --p: #4a92ec; --e: #f07a49; --lpe: #2cc28c;
+    --slow: #f2875a; --slow-bg: #3a2219; --plate: #fcfcfb; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317; --surface: #191c21; --ink: #e9ebef; --ink-2: #b4bac4; --muted: #8a919c;
+  --rule: #2c3038; --code-bg: #20242b; --p: #4a92ec; --e: #f07a49; --lpe: #2cc28c;
+  --slow: #f2875a; --slow-bg: #3a2219; --plate: #fcfcfb; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 56px; }
+.col { max-width: 68ch; }
+header { padding-top: 56px; display: grid; gap: 18px; border-bottom: 1px solid var(--rule); padding-bottom: 36px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 85%; text-wrap: balance; margin: 0; line-height: 1.1; }
+h1 { font-size: clamp(34px, 6vw, 58px); font-weight: 800; letter-spacing: -.01em; }
+h1 code { font-family: var(--f-mono); font-size: .78em; font-weight: 600; letter-spacing: -.02em; }
+h2 { font-size: clamp(25px, 3.4vw, 32px); font-weight: 750; }
+h3 { font-size: 19px; font-weight: 700; font-stretch: 90%; }
+.lede { font-size: 20px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+p { margin: 0; }
+section { display: grid; gap: 20px; }
+.stack { display: grid; gap: 14px; }
+code, .mono { font-family: var(--f-mono); font-size: .86em; }
+:not(pre) > code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+a { color: var(--p); text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--p); outline-offset: 2px; border-radius: 2px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); }
+.meta b { color: var(--ink); font-weight: 600; }
+.byline { display: flex; flex-wrap: wrap; gap: 12px 40px; padding-top: 6px; }
+.byline > div { display: grid; gap: 2px; }
+.byline b { font-family: var(--f-display); font-stretch: 90%; font-size: 18px; font-weight: 700; color: var(--ink); }
+.byline span { font-family: var(--f-mono); font-size: 13px; color: var(--ink-2); }
+.chip { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.dot.p { background: var(--p); } .dot.e { background: var(--e); } .dot.lpe { background: var(--lpe); }
+
+/* tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--f-display); font-stretch: 90%; font-weight: 700; font-size: 13.5px; letter-spacing: .02em; color: var(--ink-2); background: var(--code-bg); white-space: nowrap; }
+td.n, th.n { text-align: center; width: 76px; }
+td code { white-space: nowrap; }
+td.slow { color: var(--slow); font-weight: 700; background: var(--slow-bg); }
+td.na { color: var(--muted); }
+.caption { font-size: 14px; color: var(--muted); font-family: var(--f-body); }
+
+/* the headline chart */
+.chart { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 18px 10px; display: grid; gap: 12px; }
+.chart svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; gap: 7px; align-items: center; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+
+/* byte diagrams */
+.bytes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.enc { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.enc-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.enc-head code { background: none; padding: 0; font-weight: 600; font-size: 14px; }
+.lat { font-family: var(--f-mono); font-size: 12px; color: var(--ink-2); white-space: nowrap; }
+.lat b.slowtxt { color: var(--slow); }
+.bytes { display: flex; flex-wrap: wrap; gap: 4px; }
+.byte { display: grid; gap: 2px; text-align: center; min-width: 44px; }
+.byte .hx { font-family: var(--f-mono); font-size: 15px; font-weight: 600; padding: 5px 6px; border-radius: 4px; background: var(--code-bg); }
+.byte .lb { font-family: var(--f-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.byte.disp .hx { background: var(--slow-bg); color: var(--slow); }
+.byte.sib .hx { outline: 1.5px solid var(--muted); outline-offset: -1.5px; }
+
+/* adder model diagram */
+.model { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.unit { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 12px; align-content: start; }
+.unit h3 { display: flex; align-items: center; gap: 8px; }
+.flow { display: grid; gap: 6px; font-family: var(--f-mono); font-size: 13px; }
+.ins { display: flex; gap: 6px; flex-wrap: wrap; }
+.in { border: 1px solid var(--rule); border-radius: 4px; padding: 3px 8px; background: var(--code-bg); }
+.in.shared { border-style: dashed; }
+.arrow { color: var(--muted); padding-left: 10px; }
+.box { border-radius: 4px; padding: 6px 10px; font-weight: 600; }
+.box.p { background: color-mix(in srgb, var(--p) 16%, transparent); color: var(--ink); border: 1px solid var(--p); }
+.box.e { background: color-mix(in srgb, var(--e) 16%, transparent); color: var(--ink); border: 1px solid var(--e); }
+
+/* figure plates: the PNGs are light-themed, so they sit on a light plate in both themes */
+figure { margin: 0; display: grid; gap: 8px; }
+.plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 8px; padding: 10px; overflow-x: auto; }
+.plate img { display: block; width: 100%; min-width: 560px; height: auto; }
+figcaption { font-size: 14.5px; color: var(--ink-2); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.two > * { min-width: 0; }
+
+.callout { border-left: 3px solid var(--slow); padding: 4px 0 4px 16px; font-size: 18px; }
+.hyp { border-left: 3px solid var(--muted); padding: 2px 0 2px 16px; color: var(--ink-2); }
+.tag { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-2); white-space: nowrap; }
+.tag.measured { border-color: var(--lpe); color: var(--lpe); }
+.tag.hypothesis { border-color: var(--muted); }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+pre { background: var(--code-bg); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-family: var(--f-mono); font-size: 13.5px; margin: 0; line-height: 1.5; }
+footer { border-top: 1px solid var(--rule); padding-top: 22px; font-size: 14.5px; color: var(--ink-2); display: grid; gap: 8px; }
+@media (max-width: 520px) { body { font-size: 16px; } .lede { font-size: 18px; } th, td { padding: 8px 10px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">x86 addressing-mode timing · microbenchmark study · Oct 2026</div>
+  <h1>Adding zero to an <code>lea</code> can double its latency</h1>
+  <p class="lede">Functionally identical x86 instructions that differ only in how the address is encoded can take different time. On the Intel Core Ultra 9 285H, the Efficiency cores take 2 cycles for any LEA that has both an index register and a displacement, even when both are zero. The Performance core on the same chip takes 1.</p>
+  <div class="meta">
+    <span><b>CPU</b> Core Ultra 9 285H (Arrow Lake-H)</span>
+    <span class="chip"><i class="dot p"></i><b>P-core</b> Lion Cove · CPUs 0,1,10–13</span>
+    <span class="chip"><i class="dot e"></i><b>E-core</b> Skymont · CPUs 2–9</span>
+    <span class="chip"><i class="dot lpe"></i><b>LP E-core</b> Crestmont (inferred) · CPUs 14,15</span>
+    <span><b>OS</b> Windows 11, native</span>
+  </div>
+  <div class="byline">
+    <div><b>Abby Xiong</b><span>abbyx@andrew.cmu.edu</span></div>
+    <div><b>Yunyi Chen</b><span>yunyic@andrew.cmu.edu</span></div>
+    <div><b>Carnegie Mellon University</b><span>Pittsburgh, Pennsylvania, USA</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">The headline result</div>
+    <h2>Four ways to compute <code>rax</code></h2>
+    <p>Every instruction below produces exactly the value in <code>rax</code>: <code>rcx</code> is set to 0 and every displacement is 0. The only difference is which address parts are present in the encoding. Each LEA feeds the next one, so the time per instruction is its latency.</p>
+  </div>
+  <div class="chart" role="img" aria-label="Latency in cycles. P-core: all four forms take 1 cycle. E-core and LP E-core: base plus disp and base plus index take 1 cycle; index plus disp and base plus index plus disp take 2 cycles.">
+    <div class="legend" id="legend"></div>
+    <svg id="headline" viewBox="0 0 720 300" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Parts present</th><th>Instruction</th><th class="n">P</th><th class="n">E</th><th class="n">LP-E</th></tr></thead>
+      <tbody>
+        <tr><td>base</td><td><code>lea rax,[rax]</code></td><td class="n">1</td><td class="n">1</td><td class="n">1</td></tr>
+        <tr><td>base + disp</td><td><code>lea rax,[rax+0]</code></td><td class="n">1</td><td class="n">1</td><td class="n">1</td></tr>
+        <tr><td>base + index</td><td><code>lea rax,[rax+rcx*1]</code>, rcx = 0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td></tr>
+        <tr><td><b>index + disp</b></td><td><code>lea rax,[rax*1+0]</code></td><td class="n">1</td><td class="n slow">2</td><td class="n slow">2</td></tr>
+        <tr><td><b>base + index + disp</b></td><td><code>lea rax,[rax+rcx*1+0]</code>, rcx = 0</td><td class="n">1</td><td class="n slow">2</td><td class="n slow">2</td></tr>
+        <tr><td class="na">index only</td><td class="na">Not encodable. With no base, x86 always adds a 4-byte displacement.</td><td class="n na">–</td><td class="n na">–</td><td class="n na">–</td></tr>
+        <tr><td class="na">disp only</td><td class="na"><code>lea rax,[0]</code> has no register input, so it cannot form a latency chain.</td><td class="n na">–</td><td class="n na">–</td><td class="n na">–</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="caption">Latency in cycles, median of 7 runs, measured on two logical CPUs of each core type (P: 0 and 10, E: 2 and 6, LP-E: 14 and 15). CPUs of the same type agree within 1.2%.</p>
+  <p class="col callout">On the E-cores, an LEA is slow exactly when it has an index <em>and</em> a displacement. The number of parts doesn't matter, and the values don't matter.</p>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Same value, different bytes</div>
+    <h2>What actually changes in the instruction</h2>
+    <p>An x86 address is <code>base + index × scale + displacement</code>. The base and index are registers; the displacement is a constant stored in the instruction's own bytes. An assembler silently drops a <code>+0</code>, so every encoding here was written byte by byte and checked with <code>objdump</code>. Writing <code>rax*1</code> is how you put <code>rax</code> in the index slot instead of the base slot: mathematically a no-op, but a different instruction.</p>
+  </div>
+  <div class="bytes-grid" id="encodings"></div>
+  <p class="caption">REX.W selects 64-bit operands, 8D is the LEA opcode, ModRM says which address form follows, SIB holds scale, index and base. Highlighted bytes are the displacement.</p>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Ruling things out</div>
+    <h2>It isn't the value, the length, or the multiply</h2>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Could it be…</th><th>Test</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>The displacement's value</td><td><code>[rax+rcx*1+d]</code> with d = 0, 8, −8, 127, 4096</td><td>All 2 cycles on E-cores. Presence is the trigger.</td></tr>
+        <tr><td>The index register's value</td><td><code>rcx</code> = 1 vs <code>rcx</code> = 0</td><td>No change. The core never notices a zero index.</td></tr>
+        <tr><td>Instruction length / fetch</td><td>1-byte vs 4-byte zero; <code>[rax+0]</code> as disp32 (7 bytes) vs <code>[rax+rcx*1+0]</code> as disp8 (5 bytes)</td><td>The longer instruction is the fast one; 1-byte and 4-byte zeros cost the same.</td></tr>
+        <tr><td>The <code>*1</code> multiply</td><td><code>[rax+rcx*1]</code> has the same ×1 index</td><td>1 cycle. On E-cores even <code>[rax+rcx*4]</code> is 1 cycle.</td></tr>
+        <tr><td>Which register is base or index</td><td><code>[rax+rcx*1+0]</code> vs <code>[rcx+rax*1+0]</code></td><td>Both 2 cycles: the base path and the index path are equally slow.</td></tr>
+        <tr><td>"RBP-based LEA is slow"</td><td><code>[rbp+rax*1]</code> vs <code>[rbx+rax*1]</code>, <code>[rsp+rax*1]</code></td><td>The same effect in disguise: rbp and r13 can only be encoded with a displacement byte, so <code>[rbp+rax*1]</code> is always <code>[rbp+rax*1+0]</code>.</td></tr>
+        <tr><td>Frequency, noise, core mixing</td><td>Per-run calibration, 7 repetitions, pinning, 2 CPUs per type</td><td>Values are whole numbers within ±2%.</td></tr>
+        <tr><td>A bug in our harness</td><td>Compare with uops.info</td><td>Matches: ARL-E and MTL-E list base+index+disp8 at 2 cycles, ARL-P at 1.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="two">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Throughput (cycles/instr)</th><th class="n">P</th><th class="n">E</th><th class="n">LP-E</th></tr></thead>
+        <tbody>
+          <tr><td><code>[r14+r15*1]</code></td><td class="n">0.17</td><td class="n">0.13</td><td class="n">0.25</td></tr>
+          <tr><td><code>[r14+r15*1+0]</code></td><td class="n">0.17</td><td class="n slow">0.30</td><td class="n slow">1.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="caption">Throughput falls too: 8 independent LEAs per loop, lower is better. The E-core drops to about 3 per cycle, and the LP E-core to 1 per cycle. The P-core runs 6 per cycle either way.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Why the cores differ <span class="tag hypothesis">hypothesis</span></div>
+    <h2>A model that fits every measurement</h2>
+    <p>Intel doesn't document its address adders, so this is an inferred model. It is consistent with all our data, but timing alone can't prove it.</p>
+  </div>
+  <div class="model">
+    <div class="unit">
+      <h3><i class="dot e"></i>E-core: a 2-input adder</h3>
+      <div class="flow">
+        <div class="ins"><span class="in">A ← base</span><span class="in shared">B ← index <b>or</b> disp</span></div>
+        <div class="arrow">↓</div>
+        <div class="box e">A + B in one cycle</div>
+      </div>
+      <p>The index and the displacement compete for the same input. Any form that needs both takes a second step.</p>
+    </div>
+    <div class="unit">
+      <h3><i class="dot p"></i>P-core: a 3-input adder</h3>
+      <div class="flow">
+        <div class="ins"><span class="in">base</span><span class="in">index</span><span class="in">disp</span></div>
+        <div class="arrow">↓ missing parts fed in as 0</div>
+        <div class="box p">3-to-2 compress, then add, in one cycle</div>
+      </div>
+      <p>Every form takes 1 cycle, paid for with an extra logic layer on all six integer units: more area, more power, tighter timing.</p>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>How the E-core could split the work</th><th>Prediction</th><th>Measured</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>step 1: base + disp, step 2: + index</td><td>index path 1 cycle</td><td>index path 2</td><td>ruled out</td></tr>
+        <tr><td>step 1: index + disp, step 2: + base</td><td>base path 1 cycle</td><td>base path 2</td><td>ruled out</td></tr>
+        <tr><td>step 1: base + index, step 2: + disp</td><td>both paths 2</td><td>both 2</td><td><b>fits</b></td></tr>
+        <tr><td>one micro-op that takes 2 cycles</td><td>both paths 2</td><td>both 2</td><td><b>fits</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col stack">
+    <p><b>The trade-off.</b> Intel fits about four E-cores in the area of one P-core. The P-core spends area and power so that even rare address forms run at full speed. The E-core keeps the common forms (<code>[base]</code>, <code>[base+disp]</code>, <code>[base+index]</code>) fast and lets the rare ones take a second pass. The P-core pays elsewhere: a real scale factor (×2, ×4, ×8) costs it a cycle, consistent with a shift stage in front of its 3-input adder.</p>
+    <p class="hyp"><b>Still open:</b> is the E-core's second step a second micro-op, or one micro-op that takes 2 cycles? The two E-core designs may even differ: Skymont's throughput drops about 2.2× (close to "two micro-ops on 8 units"), Crestmont's drops 4× (closer to "one unit can do it"). Windows' <code>TotalIssues</code> counter could settle it, but needs an admin run.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Method</div>
+    <h2>How we measured</h2>
+  </div>
+  <div class="two">
+    <div class="stack" style="min-width:0">
+      <ul>
+        <li><b>Dependency chains.</b> Each LEA's output is the next one's input, so time per instruction is latency. 200 instructions unrolled per loop, 200,000 iterations, 7 repetitions, median reported.</li>
+        <li><b>Throughput.</b> 8 independent chains with fixed sources, so instructions can overlap.</li>
+        <li><b>Core pinning.</b> <code>SetThreadAffinityMask</code> to one logical CPU; core type from <code>GetSystemCpuSetInformation</code> EfficiencyClass and clock speed.</li>
+        <li><b>Cycles.</b> rdtsc, divided by an <code>add rax,rcx</code> chain (1 cycle) timed just before and after each kernel, so frequency changes cancel out.</li>
+        <li><b>Sanity checks.</b> <code>imul</code> chain = 3 / 4 / 5 cycles on P / E / LP-E; empty loop 0.005 cycles per instruction.</li>
+      </ul>
+    </div>
+    <div class="stack" style="min-width:0">
+      <h3>Native Windows, not WSL</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>WSL2</th><th>Windows</th></tr></thead>
+          <tbody>
+            <tr><td>Pin to P / E core</td><td>no</td><td>yes</td></tr>
+            <tr><td>Run-to-run noise</td><td>±20%</td><td>±2%</td></tr>
+            <tr><td>Core cycle counter</td><td>no</td><td>yes, with admin</td></tr>
+            <tr><td>Per-port counters</td><td>no</td><td>no</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caption">WSL's virtual machine exposes no hardware counters and can't choose a physical core type, so everything ran natively with MinGW gcc 16.2 and Python 3.12.</p>
+    </div>
+  </div>
+  <div class="col stack">
+    <h3>A trap in the original plan</h3>
+    <p>The plan said to calibrate with an <code>add rax,1</code> chain, assumed to take 1 cycle. On this CPU it takes 0.17 cycles on the P-core and 0.24 on the E-core: newer cores fold immediate adds before they reach an execution unit. Used as the reference, it made <code>imul</code> look like 16.5 cycles. The <code>imul</code> sanity check caught it, and the reference became <code>add rax,rcx</code>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">The wider survey</div>
+    <h2>Every addressing form we measured</h2>
+    <p>Before narrowing to the zero displacement, we ran the four planned experiments on all three core types. Every LEA latency and throughput matches uops.info within noise (black ticks in the figures).</p>
+  </div>
+  <figure>
+    <div class="plate"><img src="fig_exp1_lea_latency.png" alt="Bar chart of LEA latency by addressing form for P, E and LP E-cores, base path and index path."></div>
+    <figcaption><b>Exp 1, LEA latency.</b> The slow forms differ by core. P-core: any scale factor (×4, ×8) costs a cycle; three parts don't. E-cores: index + displacement and rbp/r13 bases cost a cycle; scaling doesn't. Skylake's well-known rule (3-part LEA = 3 cycles) holds on none of them.</figcaption>
+  </figure>
+  <figure>
+    <div class="plate"><img src="fig_exp3_equivalent.png" alt="Bar chart of equivalent-encoding comparisons, groups A to E."></div>
+    <figcaption><b>Exp 3, equivalent encodings.</b> <code>[rax*2+0]</code> is slower than <code>[rax+rax]</code>; zero displacements cost on E-cores; <code>lea [rax*4]</code> is slower than <code>shl rax,2</code>. Splitting a slow LEA into two instructions doesn't help, but moving the loop-invariant part off the dependency chain does (2 → 1 cycle on every core). gcc 16 keeps the single LEA with every <code>-march</code> tried.</figcaption>
+  </figure>
+  <figure>
+    <div class="plate"><img src="fig_exp4_lea_vs_load.png" alt="Bar chart comparing LEA latency and load-use latency for the same addressing forms on each core."></div>
+    <figcaption><b>Exp 4, LEA vs real loads.</b> Load-use latency is a flat 4 cycles on the P- and E-cores, whatever the addressing form, while LEA latency for the same forms varies. LEA timing is not a proxy for memory-addressing cost. The LP E-core has a 3-cycle fast path for simple <code>[base]</code> and <code>[base+disp8]</code> loads.</figcaption>
+  </figure>
+  <figure>
+    <div class="plate"><img src="fig_exp2_lea_throughput.png" alt="Bar chart of LEA reciprocal throughput by addressing form for each core."></div>
+    <figcaption><b>Exp 2, LEA throughput.</b> Simple LEAs run about 6 per cycle on the P-core and 7 on the E-core. On the E-core, scaled-index LEAs have 1-cycle latency but only 1 per cycle throughput. Interleaving tests suggest the P-core's slow LEAs share units with <code>imul</code> and shifts (inferred, not measured).</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Limits</div>
+    <h2>What this study can't show</h2>
+    <ul>
+      <li>Cycles are calibrated from rdtsc, not read from a core-cycle counter. Windows has one, but it needs admin rights.</li>
+      <li>No per-port or per-micro-op counters on Windows (they need VTune or native Linux), so the adder model is inferred from timing.</li>
+      <li>The LP E-core being Crestmont is inferred from its match with uops.info's Meteor Lake-E rows.</li>
+      <li>The laptop ran on battery in the Balanced power plan; calibration cancels most frequency change.</li>
+    </ul>
+  </div>
+  <div class="col stack">
+    <h3>AI use</h3>
+    <ul>
+      <li>The AI-drafted plan carried two outdated rules: <code>add rax,1</code> as a 1-cycle reference, and Skylake's "3-part LEA is slow". Both failed on this CPU and were caught by sanity checks and uops.info.</li>
+      <li>Our first explanation, "three address parts are slow", was also wrong. Testing every base / index / displacement combination showed <code>[rax*1+0]</code>, with only two parts, is slow too.</li>
+      <li>Harness bugs along the way: <code>long</code> is 32-bit on Windows (the codegen test emitted <code>lea eax</code>), and a missing <code>_WIN32_WINNT</code> hid the CPU-set API.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="col stack">
+    <div class="eyebrow">Reproduce</div>
+    <h2>Run it yourself</h2>
+    <p>From <code>Desktop\LEA\harness</code> on Windows, with WinLibs gcc and Python 3.12. The full suite takes about 2 minutes; the zero-displacement sweep about 5 minutes on six CPUs.</p>
+  </div>
+<pre>python run_all.py                                      # all experiments on CPUs 0, 2, 14 → results/results.csv
+python run_all.py --only=ez --out=zero_disp.csv 0:P 10:P 2:E 6:E 14:LP-E 15:LP-E
+python plot.py                                         # figures → results/*.png
+bench.exe list                                         # logical CPUs with core type</pre>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>File</th><th>What it holds</th></tr></thead>
+      <tbody>
+        <tr><td><code>harness/gen.py</code></td><td>Generates every kernel as assembly, including the hand-encoded <code>.byte</code> forms</td></tr>
+        <tr><td><code>harness/bench.c</code></td><td>Pinning, rdtsc calibration, 7-run medians</td></tr>
+        <tr><td><code>harness/run_all.py</code>, <code>plot.py</code></td><td>Build, run, CSV and figures</td></tr>
+        <tr><td><code>results/zero_disp.csv</code></td><td>The zero-displacement study, 180 rows</td></tr>
+        <tr><td><code>results/results.csv</code></td><td>Experiments 0–4 on all three core types, 216 rows</td></tr>
+        <tr><td><code>results/TALK.md</code>, <code>SUMMARY.md</code></td><td>5-minute talk script and full write-up</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>References: <a href="https://uops.info/html-instr/LEA_B_I_D8_R64.html">uops.info LEA_B_I_D8_R64</a> · <a href="https://uops.info/html-instr/LEA_B_IS_R64.html">uops.info LEA_B_IS_R64</a> · <a href="https://www.agner.org/optimize/instruction_tables.pdf">Agner Fog, Instruction Tables</a> · <a href="https://www.intel.com/content/www/us/en/content-details/837381/intel-processors-and-processor-cores-based-on-skymont-microarchitecture-instruction-throughput-and-latency.html">Intel Skymont latency tables</a> · <a href="https://chipsandcheese.com/p/intel-details-skymont">Chips and Cheese on Skymont</a></p>
+  <p>Measured on Intel Core Ultra 9 285H, Windows 11, October 2026.</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  // Colors are applied as style var(--token), so the chart follows the viewer's theme live.
+  function tok(n) { return "var(" + n + ")"; }
+  var NS = "http://www.w3.org/2000/svg";
+
+  // Headline: latency medians from results/zero_disp.csv (CPUs 0 / 2 / 14)
+  var forms = [
+    { label: "[rax+0]", parts: "base + disp", tone: "--muted" },
+    { label: "[rax+rcx*1]", parts: "base + index", tone: "--rule" },
+    { label: "[rax*1+0]", parts: "index + disp", tone: "--slow", soft: true },
+    { label: "[rax+rcx*1+0]", parts: "base + index + disp", tone: "--slow" }
+  ];
+  var cores = [
+    { name: "P-core", v: [0.997, 1.001, 1.001, 0.995] },
+    { name: "E-core", v: [1.000, 0.996, 1.999, 1.999] },
+    { name: "LP E-core", v: [1.000, 0.999, 1.998, 2.000] }
+  ];
+
+  var legend = document.getElementById("legend");
+  forms.forEach(function (f) {
+    var s = document.createElement("span");
+    var sw = document.createElement("i");
+    sw.className = "sw";
+    sw.style.background = "var(" + f.tone + ")";
+    if (f.soft) sw.style.opacity = "0.6";
+    s.appendChild(sw);
+    s.appendChild(document.createTextNode("lea rax," + f.label + "  (" + f.parts + ")"));
+    legend.appendChild(s);
+  });
+
+  var svg = document.getElementById("headline");
+  var W = 720, H = 300, L = 44, R = 12, T = 18, B = 40;
+  var y = function (v) { return T + (H - T - B) * (1 - v / 2.3); };
+  function el(name, attrs, text) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) {
+      if (k === "fill" || k === "stroke") e.style[k] = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    }
+    if (text != null) e.textContent = text;
+    svg.appendChild(e);
+    return e;
+  }
+  [0, 1, 2].forEach(function (t) {
+    el("line", { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: tok("--rule"), "stroke-width": t === 0 ? 1.2 : 0.8 });
+    el("text", { x: L - 10, y: y(t) + 4, "text-anchor": "end", "font-size": 12, fill: tok("--muted"), "font-family": "JetBrains Mono, monospace" }, String(t));
+  });
+  el("text", { x: 12, y: (T + H - B) / 2, "font-size": 12, fill: tok("--ink-2"), transform: "rotate(-90 12 " + (T + H - B) / 2 + ")", "text-anchor": "middle", "font-family": "JetBrains Mono, monospace" }, "cycles");
+  var gw = (W - L - R) / cores.length, bw = 30, gap = 4;
+  cores.forEach(function (c, ci) {
+    var cx = L + gw * (ci + 0.5);
+    var x0 = cx - (forms.length * bw + (forms.length - 1) * gap) / 2;
+    c.v.forEach(function (v, fi) {
+      var x = x0 + fi * (bw + gap);
+      var r = el("rect", { x: x, y: y(v), width: bw, height: y(0) - y(v), rx: 3, fill: tok(forms[fi].tone) });
+      if (forms[fi].soft) r.setAttribute("fill-opacity", "0.6");
+      var t = document.createElementNS(NS, "title");
+      t.textContent = c.name + " · lea rax," + forms[fi].label + " · " + v.toFixed(3) + " cycles";
+      r.appendChild(t);
+      el("text", { x: x + bw / 2, y: y(v) - 6, "text-anchor": "middle", "font-size": 13, "font-weight": 700, fill: tok("--ink"), "font-family": "JetBrains Mono, monospace" }, String(Math.round(v)));
+    });
+    el("text", { x: cx, y: H - 14, "text-anchor": "middle", "font-size": 14, "font-weight": 700, fill: tok("--ink-2"), "font-family": "Archivo, sans-serif" }, c.name);
+  });
+
+  // Byte-level encodings
+  var encs = [
+    { asm: "lea rax,[rax+0]", lat: "1 / 1 / 1", slow: false, bytes: [["48", "REX.W"], ["8D", "lea"], ["40", "ModRM"], ["00", "disp8", "disp"]] },
+    { asm: "lea rax,[rax*1+0]", lat: "1 / 2 / 2", slow: true, bytes: [["48", "REX.W"], ["8D", "lea"], ["04", "ModRM"], ["05", "SIB", "sib"], ["00", "disp32", "disp"], ["00", "", "disp"], ["00", "", "disp"], ["00", "", "disp"]] },
+    { asm: "lea rax,[rax+rcx*1]", lat: "1 / 1 / 1", slow: false, bytes: [["48", "REX.W"], ["8D", "lea"], ["04", "ModRM"], ["08", "SIB", "sib"]] },
+    { asm: "lea rax,[rax+rcx*1+0]", lat: "1 / 2 / 2", slow: true, bytes: [["48", "REX.W"], ["8D", "lea"], ["44", "ModRM"], ["08", "SIB", "sib"], ["00", "disp8", "disp"]] }
+  ];
+  var host = document.getElementById("encodings");
+  encs.forEach(function (e) {
+    var card = document.createElement("div");
+    card.className = "enc";
+    var head = document.createElement("div");
+    head.className = "enc-head";
+    var code = document.createElement("code");
+    code.textContent = e.asm;
+    var lat = document.createElement("span");
+    lat.className = "lat";
+    lat.innerHTML = "P / E / LP-E: " + (e.slow ? "<b class=\"slowtxt\">" + e.lat + "</b>" : e.lat);
+    head.appendChild(code);
+    head.appendChild(lat);
+    var row = document.createElement("div");
+    row.className = "bytes";
+    e.bytes.forEach(function (b) {
+      var d = document.createElement("div");
+      d.className = "byte" + (b[2] ? " " + b[2] : "");
+      d.innerHTML = "<span class=\"hx\">" + b[0] + "</span><span class=\"lb\">" + (b[1] || "&nbsp;") + "</span>";
+      row.appendChild(d);
+    });
+    card.appendChild(head);
+    card.appendChild(row);
+    host.appendChild(card);
+  });
+})();
+</script>

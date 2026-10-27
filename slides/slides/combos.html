@@ -1,0 +1,24 @@
+<section id="combos" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;letter-spacing:2px;color:#B4461A">THE TEST · PREDICTION HOLDS</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.1">Every combination of the three parts</h2>
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:56px">
+<table style="font-size:28px;color:#13171D">
+<tr><th style="width:34%;text-align:left">parts</th><th style="width:36%;text-align:left">instruction (computes rax)</th><th style="width:10%;text-align:center;color:#2563C4">P</th><th style="width:10%;text-align:center;color:#B4461A">E</th><th style="width:10%;text-align:center;color:#138A60">LP-E</th></tr>
+<tr><td>base</td><td style="font-family:'JetBrains Mono', 'Courier New', monospace">[rax]</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr><td>base + disp</td><td style="font-family:'JetBrains Mono', 'Courier New', monospace">[rax+0]</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr><td>base + index</td><td style="font-family:'JetBrains Mono', 'Courier New', monospace">[rax+rcx*1]</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+<tr style="background:#FBE6DC"><td><b>index + disp</b></td><td style="font-family:'JetBrains Mono', 'Courier New', monospace">[rax*1+0]</td><td style="text-align:center">1</td><td style="text-align:center;color:#B4461A">2</td><td style="text-align:center;color:#B4461A">2</td></tr>
+<tr style="background:#FBE6DC"><td><b>base + index + disp</b></td><td style="font-family:'JetBrains Mono', 'Courier New', monospace">[rax+rcx*1+0]</td><td style="text-align:center">1</td><td style="text-align:center;color:#B4461A">2</td><td style="text-align:center;color:#B4461A">2</td></tr>
+</table>
+<div style="display:flex;flex-direction:column;gap:28px">
+<p style="font-size:40px;line-height:1.3;font-weight:600">As predicted: slow exactly when an index and a displacement are both present.</p>
+<p style="font-size:28px;line-height:1.45;color:#4A5361">Not “three parts”: index + disp has only two and is still slow. rcx = 0 and every displacement = 0, so all five compute exactly rax.</p>
+<p style="font-size:24px;line-height:1.45;color:#6B7480">Index only can’t be encoded (no base forces a disp32). Disp only has no register input to chain.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">6 / 8</p>
+<aside>The test of our prediction. We enumerated every combination of base, index and displacement, with all extra values set to zero so every row computes the same rax. Our first guess was that three parts are slow, but the index-plus-displacement row has only two parts and is still slow. So the rule is: index and displacement together.</aside>
+</section>

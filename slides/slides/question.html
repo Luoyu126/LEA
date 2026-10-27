@@ -1,0 +1,30 @@
+<section id="question" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:64px">
+<h2 style="font-size:72px;font-weight:700;line-height:1.1">The question</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:64px">
+<div style="display:flex;flex-direction:column;gap:32px">
+<p style="font-size:44px;line-height:1.3;font-weight:600">Can two instructions that compute the same value take different time, only because the address is encoded differently?</p>
+<p style="font-size:32px;line-height:1.4;color:#4A5361">We use LEA, which computes an address without touching memory, so caches can’t interfere.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFCFD;border:1px solid #D9DEE4;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600">What the textbooks say (Skylake era)</h3>
+<ul style="font-size:28px;line-height:1.5;color:#4A5361">
+<li>3-part LEA (base + index + disp): 3 cycles</li>
+<li>RBP as the base: slow</li>
+<li>Scale factor (×2, ×4, ×8): free</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFCFD;border:1px solid #D9DEE4;border-radius:16px;padding:40px">
+<h3 style="font-size:32px;font-weight:600">Our CPU: three core designs</h3>
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:28px"><span style="color:#2563C4">■</span>  P-core · Lion Cove</p>
+<p style="font-size:28px"><span style="color:#D9581F">■</span>  E-core · Skymont</p>
+<p style="font-size:28px"><span style="color:#138A60">■</span>  LP E-core · Crestmont (inferred)</p>
+</div>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">2 / 8</p>
+<aside>LEA is ideal because it only does the address arithmetic, with no memory access, so any time difference comes from the addressing form itself. The textbook rules come from Skylake-era manuals. Our laptop chip has three different core designs, which turned out to matter.</aside>
+</section>

@@ -1,0 +1,181 @@
+experiment,kernel,form,path,metric,cycles_median,cycles_min,cycles_max,core,cpu
+Z,ez_bi_base,[rax+rcx*1],base,latency,1.0,0.981,1.006,P,0
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,0.998,0.826,1.033,P,0
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,1.001,0.992,1.005,P,0
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,0.998,0.957,1.022,P,0
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,1.001,0.994,1.008,P,0
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,0.989,0.829,1.002,P,0
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,0.997,0.993,1.004,P,0
+Z,ez_b_base,[rax],base,latency,0.995,0.991,1.008,P,0
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,0.997,0.807,1.031,P,0
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,0.999,0.994,1.004,P,0
+Z,ez_bi_index,[rcx+rax*1],index,latency,0.998,0.992,1.002,P,0
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,1.002,0.988,1.02,P,0
+Z,ez_rbx_index,[rbx+rax*1],index,latency,1.0,0.995,1.008,P,0
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,1.0,0.967,1.009,P,0
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,1.0,0.997,1.002,P,0
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,0.999,0.996,1.5,P,0
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,1.001,0.996,1.011,P,0
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,0.995,0.956,1.0,P,0
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,0.996,0.812,1.003,P,0
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,0.997,0.994,1.004,P,0
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,1.002,0.997,1.011,P,0
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,1.001,0.802,1.007,P,0
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,1.002,0.997,1.059,P,0
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,2.004,1.997,2.1,P,0
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,0.996,0.955,1.004,P,0
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.167,0.139,0.172,P,0
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,0.167,0.163,0.169,P,0
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.167,0.166,0.167,P,0
+Z,ez_tp_b,[r14],-,throughput,0.167,0.16,0.167,P,0
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.166,0.138,0.171,P,0
+Z,ez_bi_base,[rax+rcx*1],base,latency,0.998,0.822,1.013,P,10
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,1.0,0.958,1.002,P,10
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,0.999,0.996,1.001,P,10
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,1.0,0.995,1.007,P,10
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,1.001,0.957,1.438,P,10
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,0.997,0.959,0.998,P,10
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,0.996,0.99,1.0,P,10
+Z,ez_b_base,[rax],base,latency,0.998,0.823,1.082,P,10
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,1.0,0.997,1.001,P,10
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,0.993,0.961,0.999,P,10
+Z,ez_bi_index,[rcx+rax*1],index,latency,1.003,0.826,1.013,P,10
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,0.998,0.984,1.042,P,10
+Z,ez_rbx_index,[rbx+rax*1],index,latency,1.0,0.984,1.002,P,10
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,0.998,0.984,1.013,P,10
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,0.995,0.834,0.999,P,10
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,1.001,0.982,1.011,P,10
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,0.999,0.98,1.059,P,10
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,1.004,0.962,1.418,P,10
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,0.998,0.983,1.01,P,10
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,1.001,0.988,1.008,P,10
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,0.999,0.99,1.017,P,10
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,0.997,0.825,1.046,P,10
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,0.995,0.98,1.035,P,10
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,1.994,1.975,2.01,P,10
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,1.006,0.818,1.035,P,10
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.165,0.156,0.183,P,10
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,0.166,0.164,0.172,P,10
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.168,0.162,0.201,P,10
+Z,ez_tp_b,[r14],-,throughput,0.165,0.162,0.166,P,10
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.167,0.164,0.174,P,10
+Z,ez_bi_base,[rax+rcx*1],base,latency,1.001,0.938,1.012,E,2
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,2.007,1.998,2.026,E,2
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,2.021,2.001,2.095,E,2
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,1.996,1.921,2.02,E,2
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,2.013,1.972,2.104,E,2
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,2.012,1.985,2.091,E,2
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,2.011,1.997,2.042,E,2
+Z,ez_b_base,[rax],base,latency,0.997,0.996,1.005,E,2
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,1.0,0.984,1.084,E,2
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,0.999,0.991,1.004,E,2
+Z,ez_bi_index,[rcx+rax*1],index,latency,1.003,0.963,1.017,E,2
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,1.998,1.975,2.017,E,2
+Z,ez_rbx_index,[rbx+rax*1],index,latency,0.999,0.997,1.004,E,2
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,2.005,1.655,2.075,E,2
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,2.006,1.992,2.075,E,2
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,2.009,1.66,2.017,E,2
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,0.996,0.987,1.003,E,2
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,1.999,1.992,2.004,E,2
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,2.013,2.003,2.038,E,2
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,0.999,0.995,1.008,E,2
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,1.999,1.938,2.014,E,2
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,1.999,1.967,2.016,E,2
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,2.004,1.949,2.032,E,2
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,2.01,1.937,2.024,E,2
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,0.994,0.989,1.003,E,2
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.134,0.133,0.145,E,2
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,0.295,0.288,0.301,E,2
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.297,0.292,0.302,E,2
+Z,ez_tp_b,[r14],-,throughput,0.134,0.131,0.147,E,2
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.135,0.133,0.141,E,2
+Z,ez_bi_base,[rax+rcx*1],base,latency,1.003,0.995,1.029,E,6
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,2.018,2.005,2.107,E,6
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,1.996,1.916,2.106,E,6
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,2.019,2.006,2.052,E,6
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,2.002,1.964,2.012,E,6
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,2.009,1.982,2.109,E,6
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,2.01,1.992,2.016,E,6
+Z,ez_b_base,[rax],base,latency,1.001,0.99,1.007,E,6
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,1.002,0.994,1.008,E,6
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,0.996,0.957,1.003,E,6
+Z,ez_bi_index,[rcx+rax*1],index,latency,1.0,0.993,1.04,E,6
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,2.019,2.007,2.046,E,6
+Z,ez_rbx_index,[rbx+rax*1],index,latency,1.003,0.991,1.006,E,6
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,1.998,1.958,2.054,E,6
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,2.006,1.989,2.065,E,6
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,2.013,1.986,2.081,E,6
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,1.0,0.992,1.005,E,6
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,2.004,1.992,2.015,E,6
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,2.013,2.0,2.082,E,6
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,0.997,0.989,1.035,E,6
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,2.009,1.988,2.016,E,6
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,2.002,1.954,2.02,E,6
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,2.006,1.998,2.079,E,6
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,2.004,1.97,2.438,E,6
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,1.002,0.994,1.012,E,6
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.133,0.132,0.139,E,6
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,0.295,0.293,0.299,E,6
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.296,0.289,0.299,E,6
+Z,ez_tp_b,[r14],-,throughput,0.133,0.131,0.139,E,6
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.135,0.134,0.143,E,6
+Z,ez_bi_base,[rax+rcx*1],base,latency,1.0,0.999,1.003,LP-E,14
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,2.001,1.997,2.017,LP-E,14
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,2.001,1.995,2.002,LP-E,14
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,1.999,1.984,2.008,LP-E,14
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,2.0,1.998,2.005,LP-E,14
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,1.999,1.987,2.013,LP-E,14
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,2.001,1.992,2.012,LP-E,14
+Z,ez_b_base,[rax],base,latency,1.0,0.993,1.002,LP-E,14
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,1.0,0.999,1.004,LP-E,14
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,1.0,0.993,1.002,LP-E,14
+Z,ez_bi_index,[rcx+rax*1],index,latency,0.999,0.997,1.007,LP-E,14
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,2.0,1.988,2.017,LP-E,14
+Z,ez_rbx_index,[rbx+rax*1],index,latency,1.0,0.995,1.017,LP-E,14
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,1.997,1.992,2.007,LP-E,14
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,2.001,1.999,2.013,LP-E,14
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,1.997,1.987,2.006,LP-E,14
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,0.999,0.996,1.008,LP-E,14
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,2.0,1.946,2.016,LP-E,14
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,1.998,1.991,2.024,LP-E,14
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,0.999,0.996,1.002,LP-E,14
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,1.995,1.99,2.006,LP-E,14
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,1.998,1.993,2.005,LP-E,14
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,2.001,1.989,2.006,LP-E,14
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,1.998,1.988,2.008,LP-E,14
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,0.998,0.995,1.003,LP-E,14
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.252,0.25,0.254,LP-E,14
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,1.0,0.996,1.005,LP-E,14
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.999,0.995,1.004,LP-E,14
+Z,ez_tp_b,[r14],-,throughput,0.253,0.25,0.256,LP-E,14
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.252,0.249,0.255,LP-E,14
+Z,ez_bi_base,[rax+rcx*1],base,latency,1.002,0.999,1.05,LP-E,15
+Z,ez_bi_d8_0_base,[rax+rcx*1+0] disp8,base,latency,1.994,1.97,2.006,LP-E,15
+Z,ez_bi_d32_0_base,[rax+rcx*1+0] disp32,base,latency,1.995,1.986,2.006,LP-E,15
+Z,ez_bi_d8_8_base,[rax+rcx*1+8] disp8,base,latency,1.996,1.984,2.007,LP-E,15
+Z,ez_bi_d8_m8_base,[rax+rcx*1-8] disp8,base,latency,1.996,1.946,2.008,LP-E,15
+Z,ez_bi_d8_127_base,[rax+rcx*1+127] disp8,base,latency,1.996,1.986,2.008,LP-E,15
+Z,ez_bi_d32_4k_base,[rax+rcx*1+4096] disp32,base,latency,2.008,1.991,2.058,LP-E,15
+Z,ez_b_base,[rax],base,latency,0.995,0.991,1.011,LP-E,15
+Z,ez_b_d8_0_base,[rax+0] disp8,base,latency,1.002,0.997,1.012,LP-E,15
+Z,ez_b_d32_0_base,[rax+0] disp32,base,latency,0.995,0.979,1.002,LP-E,15
+Z,ez_bi_index,[rcx+rax*1],index,latency,0.999,0.995,1.014,LP-E,15
+Z,ez_bi_d8_0_index,[rcx+rax*1+0] disp8,index,latency,1.996,1.991,2.003,LP-E,15
+Z,ez_rbx_index,[rbx+rax*1],index,latency,1.003,0.973,1.008,LP-E,15
+Z,ez_rbp_d8_0_index,[rbp+rax*1+0] disp8 (forced),index,latency,1.997,1.987,2.005,LP-E,15
+Z,ez_r13_d8_0_index,[r13+rax*1+0] disp8 (forced),index,latency,2.0,1.913,2.007,LP-E,15
+Z,ez_rbp_d32_0_index,[rbp+rax*1+0] disp32,index,latency,2.001,1.999,2.01,LP-E,15
+Z0,ez0_bi_base,"[rax+rcx*1], rcx=0",base,latency,0.998,0.992,1.005,LP-E,15
+Z0,ez0_bi_d8_0_base,"[rax+rcx*1+0] disp8, rcx=0",base,latency,2.001,1.987,2.015,LP-E,15
+Z0,ez0_bi_d32_0_base,"[rax+rcx*1+0] disp32, rcx=0",base,latency,1.996,1.983,2.017,LP-E,15
+Z0,ez0_bi_index,"[rcx+rax*1], rcx=0 (rcx is base)",index,latency,0.998,0.992,1.003,LP-E,15
+Z0,ez0_bi_d8_0_index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",index,latency,1.999,1.938,2.009,LP-E,15
+ZI,ezi_i1_d32_0_index,"[rax*1+0] index+disp32, no base",index,latency,1.998,1.974,2.001,LP-E,15
+ZI,ezi_i1_d32_8_index,"[rax*1+8] index+disp32, no base",index,latency,2.0,1.997,2.009,LP-E,15
+ZI,ezi_i2_d32_0_index,"[rax*2+0] index*2+disp32, no base",index,latency,2.005,1.956,2.012,LP-E,15
+ZI,ezi_rcx_rcx_index,"[rcx+rax*1] base+index, rcx=0",index,latency,1.0,0.995,1.026,LP-E,15
+Z,ez_tp_bi,[r14+r15*1],-,throughput,0.253,0.249,0.263,LP-E,15
+Z,ez_tp_bi_d8_0,[r14+r15*1+0] disp8,-,throughput,1.002,0.993,1.064,LP-E,15
+Z,ez_tp_bi_d32_0,[r14+r15*1+0] disp32,-,throughput,0.997,0.996,1.006,LP-E,15
+Z,ez_tp_b,[r14],-,throughput,0.252,0.251,0.269,LP-E,15
+Z,ez_tp_b_d8_0,[r14+0] disp8,-,throughput,0.252,0.245,0.264,LP-E,15

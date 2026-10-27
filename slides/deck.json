@@ -1,0 +1,51 @@
+{
+  "v": 4,
+  "attachments": {},
+  "createdOnFiles": {
+    "at": "2026-10-27T20:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "faces": {
+    "ibm-plex-sans": {
+      "family": "IBM Plex Sans",
+      "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+    },
+    "jetbrains-mono": {
+      "family": "JetBrains Mono",
+      "href": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+    }
+  },
+  "lists": "css",
+  "order": [
+    "cover",
+    "question",
+    "model",
+    "pipeline",
+    "method",
+    "combos",
+    "limits",
+    "takeaway"
+  ],
+  "sections": {
+    "s1": {
+      "description": "The question and our CPU",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Our hypothesis: how P- and E-cores compute an address",
+      "start": "model"
+    },
+    "s3": {
+      "before": null,
+      "description": "Testing the prediction: method and results",
+      "start": "method"
+    },
+    "s4": {
+      "before": null,
+      "description": "AI use and the takeaway",
+      "start": "limits"
+    }
+  },
+  "title": "Adding Zero to an LEA"
+}

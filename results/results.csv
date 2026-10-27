@@ -1,0 +1,217 @@
+experiment,kernel,form,path,metric,cycles_median,cycles_min,cycles_max,core,cpu
+0,empty,loop only,-,latency,0.005,0.005,0.012,P,0
+0,add_rr_chain,"add rax,rcx",-,latency,1.0,0.962,1.083,P,0
+0,add_imm_chain,"add rax,1",-,latency,0.173,0.171,0.186,P,0
+0,imul_chain,"imul rax,rax",-,latency,2.998,2.507,3.097,P,0
+0,add_4chains,"4x add r,rcx",-,throughput,0.296,0.29,0.303,P,0
+1,e1_b_base,base,base,latency,1.0,0.994,1.031,P,0
+1,e1_bd8_base,base+disp8,base,latency,1.007,0.959,1.393,P,0
+1,e1_bd32_base,base+disp32,base,latency,1.001,0.959,1.14,P,0
+1,e1_bi_base,base+index,base,latency,1.002,0.996,1.007,P,0
+1,e1_bi_index,base+index,index,latency,1.0,0.867,1.015,P,0
+1,e1_bi4_base,base+index*4,base,latency,2.001,1.999,2.008,P,0
+1,e1_bi4_index,base+index*4,index,latency,1.999,1.997,2.001,P,0
+1,e1_bi8_base,base+index*8,base,latency,1.996,1.993,1.998,P,0
+1,e1_i4d_index,index*4+disp,index,latency,1.999,1.994,2.006,P,0
+1,e1_bid_base,base+index+disp,base,latency,1.0,0.996,1.002,P,0
+1,e1_bid_index,base+index+disp,index,latency,1.001,0.999,1.005,P,0
+1,e1_bi4d_base,base+index*4+disp,base,latency,1.999,1.994,2.008,P,0
+1,e1_bi4d_index,base+index*4+disp,index,latency,1.994,1.992,2.003,P,0
+1,e1_rbp_i_index,rbp+index,index,latency,1.0,0.995,1.004,P,0
+1,e1_r13_i_index,r13+index,index,latency,1.001,0.972,1.014,P,0
+1,e1_bid32bit_base,base+index+disp (32-bit dst),base,latency,0.999,0.997,1.003,P,0
+3A,e3A_rax_rax,"lea rax,[rax+rax] (4B)",-,latency,0.998,0.977,1.053,P,0
+3A,e3A_rax_x2,"lea rax,[rax*2+0] (8B, disp32)",-,latency,2.001,1.972,2.007,P,0
+3B,e3B_nodisp,[rax+rcx] no disp (4B),-,latency,0.999,0.974,1.01,P,0
+3B,e3B_disp8,[rax+rcx+0] disp8 (5B),-,latency,0.998,0.994,1.002,P,0
+3B,e3B_disp32,[rax+rcx+0] disp32 (8B),-,latency,0.999,0.864,1.006,P,0
+3C,e3C_rbx,[rbx+rax] (4B),index,latency,1.0,0.998,1.006,P,0
+3C,e3C_rsp,[rsp+rax] (4B),index,latency,1.0,0.996,1.053,P,0
+3C,e3C_r12,[r12+rax] (4B),index,latency,0.999,0.994,1.278,P,0
+3C,e3C_rbp,"[rbp+rax+0] (5B, disp8)",index,latency,1.001,0.991,1.003,P,0
+3C,e3C_r13,"[r13+rax+0] (5B, disp8)",index,latency,1.0,0.98,1.264,P,0
+3D,e3D_lea_x4,"lea rax,[rax*4+0]",-,latency,1.995,1.696,2.01,P,0
+3D,e3D_shl,"shl rax,2",-,latency,0.999,0.996,1.005,P,0
+3D,e3D_lea_bi,"lea rax,[rax+rcx]",-,latency,0.997,0.971,1.0,P,0
+3D,e3D_add,"add rax,rcx",-,latency,0.998,0.975,1.005,P,0
+3E,e3E_lea3,"lea rax,[rax+rcx+8]",-,latency,0.997,0.993,1.008,P,0
+3E,e3E_lea_add,"lea rax,[rax+rcx]; add rax,8",-,latency,1.012,0.886,1.028,P,0
+3E,e3E_add_add,"add rax,rcx; add rax,8",-,latency,1.014,1.002,1.032,P,0
+3E,e3E_lea3s,"lea rax,[rax+rcx*4+8]",-,latency,2.002,1.99,2.225,P,0
+3E,e3E_leas_add,"lea rax,[rax+rcx*4]; add rax,8",-,latency,2.004,1.992,2.026,P,0
+3E,e3E_hoist,"lea rdx,[rcx*4+8]; add rax,rdx",-,latency,0.998,0.856,1.016,P,0
+4,e4_b,base,base,latency,4.005,3.991,4.343,P,0
+4,e4_bi,base+index,base,latency,4.011,3.99,4.312,P,0
+4,e4_bi8,base+index*8,base,latency,4.005,3.463,4.062,P,0
+4,e4_bd8,base+disp8,base,latency,3.998,3.902,4.014,P,0
+4,e4_bd32,base+disp32,base,latency,4.007,4.002,4.296,P,0
+4,e4_bid,base+index+disp,base,latency,4.001,3.962,4.269,P,0
+2,e2_b,base,-,throughput,0.167,0.145,0.169,P,0
+2,e2_bd8,base+disp8,-,throughput,0.166,0.162,0.167,P,0
+2,e2_bi,base+index,-,throughput,0.167,0.166,0.185,P,0
+2,e2_bi4,base+index*4,-,throughput,0.333,0.312,0.339,P,0
+2,e2_i4d,index*4+disp,-,throughput,0.333,0.33,0.335,P,0
+2,e2_bid,base+index+disp,-,throughput,0.167,0.163,0.172,P,0
+2,e2_bi4d,base+index*4+disp,-,throughput,0.333,0.292,0.341,P,0
+2,e2_rbp_i,rbp+index,-,throughput,0.167,0.166,0.169,P,0
+2,e2_r13_i,r13+index,-,throughput,0.167,0.167,0.17,P,0
+2,e2_rip,rip-relative,-,throughput,0.332,0.325,0.34,P,0
+2,e2_ref_add,add alone,-,throughput,0.186,0.185,0.188,P,0
+2,e2_ref_imul,imul alone,-,throughput,0.333,0.331,0.607,P,0
+2,e2_ref_shlx,shlx alone,-,throughput,0.333,0.332,0.334,P,0
+2mix,e2_mix_bi_add,base+index + add,add,throughput,0.334,0.334,0.338,P,0
+2mix,e2_mix_bi_imul,base+index + imul,imul,throughput,0.482,0.476,0.496,P,0
+2mix,e2_mix_bi_shlx,base+index + shlx,shlx,throughput,0.336,0.336,0.34,P,0
+2mix,e2_mix_bi4_add,base+index*4 + add,add,throughput,0.352,0.342,0.352,P,0
+2mix,e2_mix_bi4_imul,base+index*4 + imul,imul,throughput,0.686,0.678,0.704,P,0
+2mix,e2_mix_bi4_shlx,base+index*4 + shlx,shlx,throughput,0.666,0.664,0.684,P,0
+2mix,e2_mix_bid_add,base+index+disp + add,add,throughput,0.334,0.332,0.34,P,0
+2mix,e2_mix_bid_imul,base+index+disp + imul,imul,throughput,0.482,0.474,0.536,P,0
+2mix,e2_mix_bid_shlx,base+index+disp + shlx,shlx,throughput,0.336,0.334,0.342,P,0
+2mix,e2_mix_bi4d_add,base+index*4+disp + add,add,throughput,0.352,0.346,0.352,P,0
+2mix,e2_mix_bi4d_imul,base+index*4+disp + imul,imul,throughput,0.68,0.666,0.682,P,0
+2mix,e2_mix_bi4d_shlx,base+index*4+disp + shlx,shlx,throughput,0.664,0.646,0.674,P,0
+0,empty,loop only,-,latency,0.005,0.005,0.005,E,2
+0,add_rr_chain,"add rax,rcx",-,latency,0.998,0.954,1.043,E,2
+0,add_imm_chain,"add rax,1",-,latency,0.237,0.228,0.238,E,2
+0,imul_chain,"imul rax,rax",-,latency,3.999,3.985,4.009,E,2
+0,add_4chains,"4x add r,rcx",-,throughput,0.254,0.254,0.255,E,2
+1,e1_b_base,base,base,latency,0.998,0.993,1.08,E,2
+1,e1_bd8_base,base+disp8,base,latency,0.998,0.992,1.005,E,2
+1,e1_bd32_base,base+disp32,base,latency,0.991,0.963,1.292,E,2
+1,e1_bi_base,base+index,base,latency,1.004,0.978,1.04,E,2
+1,e1_bi_index,base+index,index,latency,1.002,0.971,1.051,E,2
+1,e1_bi4_base,base+index*4,base,latency,0.994,0.985,1.035,E,2
+1,e1_bi4_index,base+index*4,index,latency,1.008,0.982,1.048,E,2
+1,e1_bi8_base,base+index*8,base,latency,1.015,0.937,1.093,E,2
+1,e1_i4d_index,index*4+disp,index,latency,1.985,1.946,2.013,E,2
+1,e1_bid_base,base+index+disp,base,latency,1.991,1.965,2.066,E,2
+1,e1_bid_index,base+index+disp,index,latency,1.987,1.944,2.01,E,2
+1,e1_bi4d_base,base+index*4+disp,base,latency,1.997,1.929,2.024,E,2
+1,e1_bi4d_index,base+index*4+disp,index,latency,2.019,1.968,2.037,E,2
+1,e1_rbp_i_index,rbp+index,index,latency,2.011,1.98,2.024,E,2
+1,e1_r13_i_index,r13+index,index,latency,1.98,1.921,2.002,E,2
+1,e1_bid32bit_base,base+index+disp (32-bit dst),base,latency,2.001,1.926,2.02,E,2
+3A,e3A_rax_rax,"lea rax,[rax+rax] (4B)",-,latency,1.003,0.947,1.032,E,2
+3A,e3A_rax_x2,"lea rax,[rax*2+0] (8B, disp32)",-,latency,1.996,1.929,2.009,E,2
+3B,e3B_nodisp,[rax+rcx] no disp (4B),-,latency,1.008,0.95,1.023,E,2
+3B,e3B_disp8,[rax+rcx+0] disp8 (5B),-,latency,2.005,1.983,2.046,E,2
+3B,e3B_disp32,[rax+rcx+0] disp32 (8B),-,latency,2.003,1.96,2.024,E,2
+3C,e3C_rbx,[rbx+rax] (4B),index,latency,1.006,0.986,1.025,E,2
+3C,e3C_rsp,[rsp+rax] (4B),index,latency,1.009,0.867,1.029,E,2
+3C,e3C_r12,[r12+rax] (4B),index,latency,1.004,0.962,1.022,E,2
+3C,e3C_rbp,"[rbp+rax+0] (5B, disp8)",index,latency,1.979,1.785,2.023,E,2
+3C,e3C_r13,"[r13+rax+0] (5B, disp8)",index,latency,2.001,1.971,2.045,E,2
+3D,e3D_lea_x4,"lea rax,[rax*4+0]",-,latency,1.997,1.929,2.048,E,2
+3D,e3D_shl,"shl rax,2",-,latency,0.997,0.962,1.034,E,2
+3D,e3D_lea_bi,"lea rax,[rax+rcx]",-,latency,0.979,0.959,1.023,E,2
+3D,e3D_add,"add rax,rcx",-,latency,0.998,0.944,1.055,E,2
+3E,e3E_lea3,"lea rax,[rax+rcx+8]",-,latency,1.957,1.811,2.014,E,2
+3E,e3E_lea_add,"lea rax,[rax+rcx]; add rax,8",-,latency,1.996,1.96,2.098,E,2
+3E,e3E_add_add,"add rax,rcx; add rax,8",-,latency,1.98,1.942,1.994,E,2
+3E,e3E_lea3s,"lea rax,[rax+rcx*4+8]",-,latency,2.01,1.856,2.098,E,2
+3E,e3E_leas_add,"lea rax,[rax+rcx*4]; add rax,8",-,latency,2.014,1.92,2.13,E,2
+3E,e3E_hoist,"lea rdx,[rcx*4+8]; add rax,rdx",-,latency,1.09,1.074,1.134,E,2
+4,e4_b,base,base,latency,4.041,3.972,4.228,E,2
+4,e4_bi,base+index,base,latency,4.008,3.818,4.334,E,2
+4,e4_bi8,base+index*8,base,latency,4.018,3.985,4.076,E,2
+4,e4_bd8,base+disp8,base,latency,4.0,3.952,4.386,E,2
+4,e4_bd32,base+disp32,base,latency,3.982,3.862,4.091,E,2
+4,e4_bid,base+index+disp,base,latency,3.937,3.844,4.08,E,2
+2,e2_b,base,-,throughput,0.137,0.128,0.14,E,2
+2,e2_bd8,base+disp8,-,throughput,0.14,0.126,0.143,E,2
+2,e2_bi,base+index,-,throughput,0.136,0.108,0.145,E,2
+2,e2_bi4,base+index*4,-,throughput,1.004,0.922,1.032,E,2
+2,e2_i4d,index*4+disp,-,throughput,1.004,0.99,1.014,E,2
+2,e2_bid,base+index+disp,-,throughput,0.298,0.29,0.302,E,2
+2,e2_bi4d,base+index*4+disp,-,throughput,1.004,0.916,1.009,E,2
+2,e2_rbp_i,rbp+index,-,throughput,0.299,0.296,0.308,E,2
+2,e2_r13_i,r13+index,-,throughput,0.298,0.295,0.309,E,2
+2,e2_rip,rip-relative,-,throughput,0.251,0.246,0.259,E,2
+2,e2_ref_add,add alone,-,throughput,0.175,0.167,0.21,E,2
+2,e2_ref_imul,imul alone,-,throughput,0.544,0.537,0.546,E,2
+2,e2_ref_shlx,shlx alone,-,throughput,0.256,0.249,0.279,E,2
+2mix,e2_mix_bi_add,base+index + add,add,throughput,0.33,0.322,0.338,E,2
+2mix,e2_mix_bi_imul,base+index + imul,imul,throughput,0.528,0.516,0.536,E,2
+2mix,e2_mix_bi_shlx,base+index + shlx,shlx,throughput,0.348,0.33,0.362,E,2
+2mix,e2_mix_bi4_add,base+index*4 + add,add,throughput,0.998,0.984,1.022,E,2
+2mix,e2_mix_bi4_imul,base+index*4 + imul,imul,throughput,1.0,0.98,1.058,E,2
+2mix,e2_mix_bi4_shlx,base+index*4 + shlx,shlx,throughput,1.002,0.936,1.052,E,2
+2mix,e2_mix_bid_add,base+index+disp + add,add,throughput,0.448,0.43,0.474,E,2
+2mix,e2_mix_bid_imul,base+index+disp + imul,imul,throughput,0.548,0.524,0.556,E,2
+2mix,e2_mix_bid_shlx,base+index+disp + shlx,shlx,throughput,0.49,0.478,0.502,E,2
+2mix,e2_mix_bi4d_add,base+index*4+disp + add,add,throughput,0.98,0.968,1.02,E,2
+2mix,e2_mix_bi4d_imul,base+index*4+disp + imul,imul,throughput,1.152,1.136,1.174,E,2
+2mix,e2_mix_bi4d_shlx,base+index*4+disp + shlx,shlx,throughput,1.012,0.986,1.034,E,2
+0,empty,loop only,-,latency,0.005,0.005,0.005,LP-E,14
+0,add_rr_chain,"add rax,rcx",-,latency,0.997,0.988,1.003,LP-E,14
+0,add_imm_chain,"add rax,1",-,latency,1.0,0.997,1.001,LP-E,14
+0,imul_chain,"imul rax,rax",-,latency,5.01,4.985,5.032,LP-E,14
+0,add_4chains,"4x add r,rcx",-,throughput,0.296,0.293,0.298,LP-E,14
+1,e1_b_base,base,base,latency,1.0,0.89,1.008,LP-E,14
+1,e1_bd8_base,base+disp8,base,latency,1.001,0.998,1.011,LP-E,14
+1,e1_bd32_base,base+disp32,base,latency,0.999,0.996,1.0,LP-E,14
+1,e1_bi_base,base+index,base,latency,1.002,0.995,1.006,LP-E,14
+1,e1_bi_index,base+index,index,latency,1.002,0.994,1.006,LP-E,14
+1,e1_bi4_base,base+index*4,base,latency,0.997,0.992,1.002,LP-E,14
+1,e1_bi4_index,base+index*4,index,latency,0.999,0.999,1.004,LP-E,14
+1,e1_bi8_base,base+index*8,base,latency,0.999,0.993,1.004,LP-E,14
+1,e1_i4d_index,index*4+disp,index,latency,2.002,1.986,2.013,LP-E,14
+1,e1_bid_base,base+index+disp,base,latency,2.001,1.993,2.01,LP-E,14
+1,e1_bid_index,base+index+disp,index,latency,2.004,1.992,2.008,LP-E,14
+1,e1_bi4d_base,base+index*4+disp,base,latency,2.001,1.827,2.013,LP-E,14
+1,e1_bi4d_index,base+index*4+disp,index,latency,1.998,1.833,2.012,LP-E,14
+1,e1_rbp_i_index,rbp+index,index,latency,1.997,1.984,1.999,LP-E,14
+1,e1_r13_i_index,r13+index,index,latency,2.0,1.991,2.02,LP-E,14
+1,e1_bid32bit_base,base+index+disp (32-bit dst),base,latency,2.001,1.997,2.009,LP-E,14
+3A,e3A_rax_rax,"lea rax,[rax+rax] (4B)",-,latency,1.0,0.998,1.004,LP-E,14
+3A,e3A_rax_x2,"lea rax,[rax*2+0] (8B, disp32)",-,latency,1.999,1.996,2.012,LP-E,14
+3B,e3B_nodisp,[rax+rcx] no disp (4B),-,latency,1.003,1.0,1.006,LP-E,14
+3B,e3B_disp8,[rax+rcx+0] disp8 (5B),-,latency,2.0,1.99,2.007,LP-E,14
+3B,e3B_disp32,[rax+rcx+0] disp32 (8B),-,latency,2.001,1.99,2.011,LP-E,14
+3C,e3C_rbx,[rbx+rax] (4B),index,latency,0.999,0.997,1.001,LP-E,14
+3C,e3C_rsp,[rsp+rax] (4B),index,latency,1.003,0.997,1.007,LP-E,14
+3C,e3C_r12,[r12+rax] (4B),index,latency,0.998,0.994,1.005,LP-E,14
+3C,e3C_rbp,"[rbp+rax+0] (5B, disp8)",index,latency,1.998,1.993,2.017,LP-E,14
+3C,e3C_r13,"[r13+rax+0] (5B, disp8)",index,latency,1.997,1.99,2.003,LP-E,14
+3D,e3D_lea_x4,"lea rax,[rax*4+0]",-,latency,2.002,1.996,2.006,LP-E,14
+3D,e3D_shl,"shl rax,2",-,latency,1.001,0.998,1.003,LP-E,14
+3D,e3D_lea_bi,"lea rax,[rax+rcx]",-,latency,1.001,0.993,1.017,LP-E,14
+3D,e3D_add,"add rax,rcx",-,latency,0.999,0.998,1.007,LP-E,14
+3E,e3E_lea3,"lea rax,[rax+rcx+8]",-,latency,1.999,1.995,2.006,LP-E,14
+3E,e3E_lea_add,"lea rax,[rax+rcx]; add rax,8",-,latency,2.0,1.992,2.002,LP-E,14
+3E,e3E_add_add,"add rax,rcx; add rax,8",-,latency,2.0,1.992,2.002,LP-E,14
+3E,e3E_lea3s,"lea rax,[rax+rcx*4+8]",-,latency,1.998,1.983,2.004,LP-E,14
+3E,e3E_leas_add,"lea rax,[rax+rcx*4]; add rax,8",-,latency,1.994,1.97,2.018,LP-E,14
+3E,e3E_hoist,"lea rdx,[rcx*4+8]; add rax,rdx",-,latency,1.068,1.062,1.072,LP-E,14
+4,e4_b,base,base,latency,2.999,2.976,3.01,LP-E,14
+4,e4_bi,base+index,base,latency,3.997,3.988,4.003,LP-E,14
+4,e4_bi8,base+index*8,base,latency,4.0,3.984,4.031,LP-E,14
+4,e4_bd8,base+disp8,base,latency,2.997,2.993,3.006,LP-E,14
+4,e4_bd32,base+disp32,base,latency,3.997,3.986,4.063,LP-E,14
+4,e4_bid,base+index+disp,base,latency,4.006,3.995,4.008,LP-E,14
+2,e2_b,base,-,throughput,0.252,0.251,0.254,LP-E,14
+2,e2_bd8,base+disp8,-,throughput,0.252,0.252,0.253,LP-E,14
+2,e2_bi,base+index,-,throughput,0.252,0.251,0.253,LP-E,14
+2,e2_bi4,base+index*4,-,throughput,1.0,0.993,1.004,LP-E,14
+2,e2_i4d,index*4+disp,-,throughput,1.001,0.997,1.004,LP-E,14
+2,e2_bid,base+index+disp,-,throughput,1.001,0.991,1.009,LP-E,14
+2,e2_bi4d,base+index*4+disp,-,throughput,1.0,0.996,1.01,LP-E,14
+2,e2_rbp_i,rbp+index,-,throughput,1.001,0.999,1.004,LP-E,14
+2,e2_r13_i,r13+index,-,throughput,0.999,0.991,1.012,LP-E,14
+2,e2_rip,rip-relative,-,throughput,0.256,0.254,0.257,LP-E,14
+2,e2_ref_add,add alone,-,throughput,0.253,0.252,0.256,LP-E,14
+2,e2_ref_imul,imul alone,-,throughput,0.5,0.497,0.506,LP-E,14
+2,e2_ref_shlx,shlx alone,-,throughput,0.252,0.25,0.253,LP-E,14
+2mix,e2_mix_bi_add,base+index + add,add,throughput,0.504,0.504,0.506,LP-E,14
+2mix,e2_mix_bi_imul,base+index + imul,imul,throughput,0.67,0.666,0.682,LP-E,14
+2mix,e2_mix_bi_shlx,base+index + shlx,shlx,throughput,0.504,0.504,0.508,LP-E,14
+2mix,e2_mix_bi4_add,base+index*4 + add,add,throughput,1.0,0.994,1.014,LP-E,14
+2mix,e2_mix_bi4_imul,base+index*4 + imul,imul,throughput,1.0,0.998,1.008,LP-E,14
+2mix,e2_mix_bi4_shlx,base+index*4 + shlx,shlx,throughput,0.998,0.994,1.004,LP-E,14
+2mix,e2_mix_bid_add,base+index+disp + add,add,throughput,1.002,0.998,1.018,LP-E,14
+2mix,e2_mix_bid_imul,base+index+disp + imul,imul,throughput,1.01,0.998,1.038,LP-E,14
+2mix,e2_mix_bid_shlx,base+index+disp + shlx,shlx,throughput,1.0,0.998,1.02,LP-E,14
+2mix,e2_mix_bi4d_add,base+index*4+disp + add,add,throughput,1.0,0.996,1.018,LP-E,14
+2mix,e2_mix_bi4d_imul,base+index*4+disp + imul,imul,throughput,1.006,1.0,1.012,LP-E,14
+2mix,e2_mix_bi4d_shlx,base+index*4+disp + shlx,shlx,throughput,1.0,0.994,1.016,LP-E,14
