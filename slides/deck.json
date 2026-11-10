@@ -24,8 +24,13 @@
     "pipeline",
     "method",
     "combos",
+    "replicate",
+    "onlylea",
     "limits",
-    "takeaway"
+    "takeaway",
+    "bk_modes",
+    "bk_fold",
+    "bk_uops"
   ],
   "sections": {
     "s1": {
@@ -45,6 +50,10 @@
       "before": null,
       "description": "AI use and the takeaway",
       "start": "limits"
+    },
+    "s5": {
+      "description": "Backup: more results from the second chip",
+      "start": "bk_modes"
     }
   },
   "title": "Adding Zero to an LEA"

@@ -1,0 +1,23 @@
+<section id="bk_fold" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;letter-spacing:2px;color:#B4461A">BACKUP · RAPTOR COVE P-CORE</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.1">A small constant is almost free</h2>
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:56px">
+<table style="font-size:28px;color:#13171D">
+<tr><th style="width:60%;text-align:left">k in lea rax,[rax+k] or add rax,k</th><th style="width:20%;text-align:center;color:#2563C4">P</th><th style="width:20%;text-align:center;color:#B4461A">E</th></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">0, ±1</td><td style="text-align:center;color:#2563C4"><b>0.17</b></td><td style="text-align:center">1</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">127, 128</td><td style="text-align:center;color:#2563C4"><b>0.33</b></td><td style="text-align:center">1</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">1023, −1024</td><td style="text-align:center;color:#2563C4"><b>0.52</b></td><td style="text-align:center">1</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">1024, −1025, 2047, 4096</td><td style="text-align:center">1</td><td style="text-align:center">1</td></tr>
+</table>
+<div style="display:flex;flex-direction:column;gap:28px">
+<p style="font-size:40px;line-height:1.3;font-weight:600">For k in −1024…1023, the P-core adds the constant almost for free.</p>
+<p style="font-size:28px;line-height:1.45;color:#4A5361">Only the value matters, not disp8 vs disp32: the opposite of the E-core effect, which depends on the encoding.</p>
+<p style="font-size:24px;line-height:1.45;color:#6B7480">i7-13700H, latency in cycles. The 285H’s Lion Cove takes 1 cycle for lea rax,[rax+8].</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">12 / 13</p>
+<aside>Backup, for the 0.17 cycles that shows up on the second chip. On the Raptor Cove P-core, lea rax,[rax+k] and add rax,k behave the same, and both are much faster than one cycle when k is small: about 6 per cycle for k of 0 or 1. Up to 1023 and down to minus 1024 it is still below one cycle, but it costs more as k grows. From 1024 on it is a normal 1-cycle add. Whether the constant is stored in 1 byte or 4 makes no difference; only its value counts. That is the opposite of the E-core effect, which depends on the encoding and not on the value. The Lion Cove P-core on the 285H did not do this for LEA.</aside>
+</section>

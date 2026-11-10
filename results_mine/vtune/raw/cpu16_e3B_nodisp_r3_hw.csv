@@ -1,0 +1,38 @@
+﻿vtune.exe : vtune: Using result path `C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\cpu16_e3B_nodisp_r3'
+At C:\Users\ziqix\downloads\LEA\results_mine\vtune\measure_uops.ps1:23 char:11
++     $hw = & $vt -report hw-events -result-dir $r -group-by cpuid -for ...
++           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (vtune: Using re..._e3B_nodisp_r3':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+vtune: Executing actions  0 %                                                  
+vtune: Executing actions  0 % Finalizing results                               
+vtune: Executing actions 50 % Finalizing results                               
+vtune: Executing actions 50 % Generating a report                              
+vtune: Executing actions 50 % Setting data model parameters                    
+vtune: Executing actions 75 % Setting data model parameters                    
+Logical Core,Hardware Event Count:CPU_CLK_UNHALTED.CORE,Hardware Event Count:CPU_CLK_UNHALTED.THREAD,Hardware Event Count:INST_RETIRED.ANY,Hardware Event Count:UOPS_ISSUED.ANY,Hardware Event Count:UOPS_RETIRED.ALL,Hardware Event Count:UOPS_RETIRED.HEAVY,Hardware Event Count:UOPS_RETIRED.MS,Hardware Event Count:UOPS_RETIRED.SLOTS
+cpu_16,1171877790,1196628926,1237535312,1299140850,1171376786,0,16438738,0
+cpu_18,211584004,86118694,72875094,97842026,215877670,0,5792370,0
+cpu_12,201237382,175199800,180408662,268785842,211353104,0,10112276,0
+cpu_17,189038578,290868772,306871012,464762276,216064634,0,11077178,0
+cpu_19,169724954,163570350,155399124,233926292,207792844,0,5592224,0
+cpu_13,104109764,102278438,113009838,160421658,116179280,0,4429690,0
+cpu_15,47266720,43199160,51787036,68820782,77476426,0,4689354,0
+cpu_14,41536136,29586658,36585310,52687038,55715004,0,1783036,0
+cpu_0,0,191977480,221503886,269947360,0,53919688,41377706,247781168
+cpu_1,0,1374704,845914,1356560,0,415044,358232,1184492
+cpu_10,0,10849738,4946444,9298236,0,1572828,1181506,6030212
+cpu_11,0,2573476,702270,1531528,0,367642,319612,1007974
+cpu_2,0,224703834,268483672,378964186,0,61965244,47798640,297194010
+cpu_3,0,2154672,875164,1600340,0,427920,369172,1224560
+cpu_4,0,201991104,240656268,313062784,0,46968718,30547008,258631878
+cpu_5,0,2141568,718776,1414582,0,371606,322644,1026850
+cpu_6,0,139061608,99598188,148409694,0,20947566,14581804,108281652
+cpu_7,0,2219810,745402,1436558,0,385966,335060,1065308
+cpu_8,0,6235790,2072718,4634576,0,802688,644550,2654244
+cpu_9,0,2919230,710012,1654826,0,371264,322718,1018268
+vtune: Executing actions 75 % Generating a report                              
+vtune: Executing actions 100 % Generating a report                             
+vtune: Executing actions 100 % done                                            

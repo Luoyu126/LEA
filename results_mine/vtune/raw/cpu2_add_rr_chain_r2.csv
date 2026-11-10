@@ -1,0 +1,61 @@
+﻿vtune.exe : vtune: Using result path `C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\cpu2_add_rr_chain_r2'
+At C:\Users\ziqix\downloads\LEA\results_mine\vtune\measure_uops.ps1:21 char:12
++     $rep = & $vt -report summary -result-dir $r -format csv -csv-deli ...
++            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (vtune: Using re...dd_rr_chain_r2':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+vtune: Executing actions  0 %                                                  
+vtune: Executing actions  0 % Finalizing results                               
+vtune: Executing actions 50 % Finalizing results                               
+vtune: Executing actions 50 % Generating a report                              
+vtune: Executing actions 50 % Setting data model parameters                    
+vtune: Executing actions 75 % Setting data model parameters                    
+
+Collection and Platform Info
+----------------------------
+Parameter,cpu2_add_rr_chain_r2
+Application Command Line,C:\Users\ziqix\downloads\LEA\harness\uopcount.exe "2" "add_rr_chain" "200000" "25" 
+Operating System,Microsoft Windows 11
+Computer Name,Abbyx
+Result Size,3500711
+Collection start time,15:56:32 10/11/2026 UTC
+Collection stop time,15:56:32 10/11/2026 UTC
+Collector Type,Event-based counting driver
+
+CPU
+---
+Parameter,cpu2_add_rr_chain_r2
+Name,Intel(R) microarchitecture code named Raptorlake-P
+Frequency,2918000000
+Logical CPU Count,20
+
+Summary
+-------
+Elapsed Time:,0.223555
+Paused Time:,0.0
+CPI Rate:,0.888943
+
+Event summary
+-------------
+Hardware Event Type,Core Type,Hardware Event Count:Self,Hardware Event Sample Count:Self,Events Per Sample,Precise:Self
+CPU_CLK_UNHALTED.CORE,P-Core,0,12,[Unknown],
+CPU_CLK_UNHALTED.CORE,E-Core,95258154,8,[Unknown],
+CPU_CLK_UNHALTED.THREAD,P-Core,2333455926,12,[Unknown],
+CPU_CLK_UNHALTED.THREAD,E-Core,33715414,8,[Unknown],
+INST_RETIRED.ANY,P-Core,2644731366,12,[Unknown],
+INST_RETIRED.ANY,E-Core,18173514,8,[Unknown],
+UOPS_ISSUED.ANY,P-Core,3130532750,12,[Unknown],
+UOPS_ISSUED.ANY,E-Core,29510022,8,[Unknown],
+UOPS_RETIRED.ALL,P-Core,0,12,[Unknown],
+UOPS_RETIRED.ALL,E-Core,88662648,8,[Unknown],
+UOPS_RETIRED.HEAVY,P-Core,348554878,12,[Unknown],
+UOPS_RETIRED.HEAVY,E-Core,0,8,[Unknown],
+UOPS_RETIRED.MS,P-Core,240130168,12,[Unknown],
+UOPS_RETIRED.MS,E-Core,2939454,8,[Unknown],
+UOPS_RETIRED.SLOTS,P-Core,2798792788,12,[Unknown],
+UOPS_RETIRED.SLOTS,E-Core,0,8,[Unknown],
+vtune: Executing actions 75 % Generating a report                              
+vtune: Executing actions 100 % Generating a report                             
+vtune: Executing actions 100 % done                                            

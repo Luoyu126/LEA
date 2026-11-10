@@ -6,3 +6,4 @@ harness/kernels.h
 harness/kernels.json
 __pycache__/
 *.pyc
+harness/uopcount.exe

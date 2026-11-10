@@ -1,4 +1,4 @@
-<section id="method" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:56px">
+<section id="method" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
 <h2 style="font-size:72px;font-weight:700;line-height:1.1">How we measured</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:32px">
 <div style="display:flex;flex-direction:column;gap:16px;background:#FBFCFD;border:1px solid #D9DEE4;border-radius:16px;padding:36px">
@@ -26,7 +26,11 @@
 <p style="font-size:28px;font-weight:600;white-space:nowrap">Native Windows, not WSL</p>
 <p style="font-size:28px;color:#4A5361">WSL can’t pin to a core type and showed ±20% noise; native runs agree within ±2%.</p>
 </div>
+<div style="display:flex;gap:32px;align-items:center;background:#E6EAEF;border-radius:16px;padding:32px 40px">
+<p style="font-size:28px;font-weight:600;white-space:nowrap">Repeated on a second laptop</p>
+<p style="font-size:28px;color:#4A5361">i7-13700H, one thread per hyperthreaded P-core. The calibration held when the clock changed ~35% between battery and AC runs.</p>
+</div>
 <p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
-<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">5 / 8</p>
-<aside>This is how we tested the prediction. The four steps are in the order they happen. The chain means each instruction waits for the previous result, so we measure latency. We wrote the bytes by hand because an assembler silently removes a +0. Pinning matters because the three core types give different answers. The cycle count comes from the timestamp counter, calibrated against a known 1-cycle instruction.</aside>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">5 / 13</p>
+<aside>This is how we tested the prediction. The four steps are in the order they happen. The chain means each instruction waits for the previous result, so we measure latency. We wrote the bytes by hand because an assembler silently removes a +0. Pinning matters because the three core types give different answers. The cycle count comes from the timestamp counter, calibrated against a known 1-cycle instruction. We then repeated everything on a second laptop, an i7-13700H. Its P-cores have two threads each, so we used only one thread per core. The clock was about 35% different between the battery and the AC runs, and the cycle counts still came out the same, so the calibration works.</aside>
 </section>

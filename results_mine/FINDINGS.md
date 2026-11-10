@@ -108,7 +108,8 @@ register, so you can't chain it to measure latency; only throughput is possible.
   also about 3.6 cycles per instruction, even with 8 independent chains. That suggests 16-bit `lea`
   goes down a separate slow path on that core, possibly microcode. Writing a 16-bit register has to
   merge with the old upper bits, which costs extra. I can't tell the exact mechanism from timing
-  alone.
+  alone. (Part 4's counters later confirmed it: about 3 micro-ops on Gracemont, mostly from
+  microcode, and 2 micro-ops without microcode on the P-core.)
 - **0x67 switches off the P-core's free `lea`.** `lea rax,[rax]` is 0.17 cycles, but `lea rax,[eax]`
   and `lea eax,[rax]` are 1 cycle. Truncating to 32 bits needs real work.
 
@@ -164,30 +165,95 @@ I also tested base only, `+0` as disp8 or disp32, scaled `*8`, and index only: s
   (`extension_loadcheck.csv`), so the cause isn't the shared address. I couldn't find the reason
   from timing alone. It doesn't affect the with/without comparison.
 
-## Part 4: micro-op counts (not done: VTune is not installed)
+## Part 4: micro-op counts (VTune)
 
-The question: on Gracemont, is `lea rax,[rax+rcx+0]` **two micro-ops** (split in two) or **one
-micro-op that takes 2 cycles**? Timing can't separate these. A micro-op counter can.
+**The question.** On Gracemont, `lea rax,[rax+rcx+0]` takes 2 cycles where `lea rax,[rax+rcx]`
+takes 1. Is the slow form **split into two micro-ops**, or is it **one micro-op that takes 2
+cycles**? Timing alone can't tell these apart. A micro-op counter can.
 
-To install and run it:
-1. Download **Intel VTune Profiler** (standalone, free) from Intel's oneAPI download page and run the
-   installer. It needs administrator rights and installs a sampling driver. Reboot if asked.
-2. Open a *new* terminal so `vtune` is on the PATH (or run
-   `"C:\Program Files (x86)\Intel\oneAPI\setvars.bat"`). Check with `vtune --version`.
-3. From `harness/`, count retired micro-ops and instructions for the fast and slow kernels on an
-   E-core (CPU 12). Event names can differ per VTune version; `vtune -collect-with runsa -knob
-   event-config=? ` lists the ones available. On hybrid chips the E-core events carry a
-   `cpu_atom/` prefix.
-   ```
-   vtune -collect-with runsa -knob event-config=UOPS_RETIRED.ALL,INST_RETIRED.ANY -r vt_fast -- bench.exe 12 200000 e3B_nodisp
-   vtune -collect-with runsa -knob event-config=UOPS_RETIRED.ALL,INST_RETIRED.ANY -r vt_slow -- bench.exe 12 200000 e3B_disp8
-   vtune -report summary -r vt_fast
-   vtune -report summary -r vt_slow
-   ```
-4. Micro-ops per instruction = UOPS_RETIRED ÷ INST_RETIRED. The `add rax,rcx` calibration loop runs
-   too, but it's 1 micro-op per instruction, so it only dilutes. Comparing fast and slow still shows
-   the difference. **≈ 2 for the slow form** means it is split in two. **≈ 1** means one slower step.
-   The 16-bit `lea ax,...` (≈3.6 cycles) would be a good second target.
+**The tool.** Intel VTune 2026.6, in *counting mode*: it reads the CPU's built-in event counters
+during the run. It needs administrator rights, so the script was started through a UAC prompt.
+No Windows security settings were changed. The self-checker complained about a "virtual machine"
+(Windows' hypervisor is running, probably for WSL2 or Docker), but counting worked anyway.
+
+**What was counted.** The two core types have different counter names:
+
+| | P-core (Raptor Cove) | E-core (Gracemont) |
+|---|---|---|
+| instructions finished | `INST_RETIRED.ANY` | `INST_RETIRED.ANY` |
+| micro-ops finished | `UOPS_RETIRED.SLOTS` | `UOPS_RETIRED.ALL` |
+| micro-ops started (cross-check) | `UOPS_ISSUED.ANY` | `UOPS_ISSUED.ANY` |
+| micro-ops from the microcode ROM | `UOPS_RETIRED.MS` | `UOPS_RETIRED.MS` |
+| extra micro-ops of multi-micro-op instructions | `UOPS_RETIRED.HEAVY` | (none) |
+| cycles | `CPU_CLK_UNHALTED.THREAD` | `CPU_CLK_UNHALTED.CORE` |
+
+**How the kernel was isolated.**
+- `bench.exe` also runs the `add rax,rcx` calibration loop and a warm-up, which would mix into the
+  counts. So a separate small program, `harness/uopcount.c`, runs **one kernel only**, pinned to
+  one CPU: 200 instructions × 200,000 loop passes × 25 = 10⁹ instructions.
+- The counters see the whole computer (every program, every CPU), so only the row for the CPU the
+  program was pinned to is used (`-report hw-events -group-by cpuid`).
+- That CPU still sees program start-up and some background work. To remove it, the `empty`
+  kernel (same program, no loop body) was run on the same CPU in the same round and subtracted:
+  `micro-ops per instruction = (uops_kernel − uops_empty) ÷ (instructions_kernel − instructions_empty)`.
+- **Control:** `add rax,rcx` is known to be exactly 1 micro-op, so it must come out at 1.00.
+- Each kernel ran 3 times on each of 4 CPUs: 12 and 16 (E), 2 and 8 (P).
+
+**Results** (mean of 3 rounds; "a / b" = the two CPUs of that core type, 12 / 16 for E and 2 / 8 for P):
+
+| instruction | core | micro-ops per instruction | of which from microcode | cycles per instruction (counter) |
+|---|---|---|---|---|
+| `add rax,rcx` (control) | E | 0.99 / 1.06 | 0.01 / 0.00 | 0.99 / 1.00 |
+| `lea rax,[rax+rcx]` | E | 1.04 / 1.02 | 0.01 / 0.01 | 1.03 / 1.02 |
+| `lea rax,[rax+rcx+0]` | E | **1.02 / 0.99** | 0.00 / 0.01 | **1.99 / 1.90** |
+| `lea ax,[rax+rcx]` (16-bit) | E | **2.96 / 2.80** | **1.94 / 1.80** | 3.56 / 3.34 |
+| `add rax,rcx` (control) | P | 1.01 / 1.00 | 0.01 / 0.00 | 0.98 / 0.98 |
+| `lea rax,[rax+rcx]` | P | 1.01 / 1.00 | 0.00 / 0.00 | 0.99 / 0.97 |
+| `lea rax,[rax+rcx+0]` | P | 1.01 / 1.00 | 0.00 / 0.01 | 0.99 / 0.98 |
+| `lea ax,[rax+rcx]` (16-bit) | P | **1.95 / 1.99** | 0.01 / 0.00 | 1.92 / 1.96 |
+
+Every round is in `vtune/uops.csv`. The "micro-ops started" counter agrees with "micro-ops finished"
+within 0.05 in every row. On the P-core, 16-bit `lea` also shows 0.95–0.99 `HEAVY` micro-ops per
+instruction: the counter's way of saying "this instruction had a second micro-op".
+
+**How clean is it?** Clean enough to tell 1 micro-op from 2, not clean enough for the second decimal.
+- The P-core numbers are tight: single rounds stay within 0.98–1.04 for the 1-micro-op rows.
+- The E-core numbers are noisier. Single rounds of the 1-micro-op rows range from 0.91 to 1.19,
+  and the 16-bit row ranges from 2.63 to 3.07.
+- The leftover instruction count (should be exactly 10⁹) ranged from 0.83 to 1.24 × 10⁹ per round.
+  So background work on the pinned CPU still leaks in. Because that background work is also about
+  1 micro-op per instruction, it blurs the ratio much less than the raw counts.
+- Even so, no round of the slow `+0` form came anywhere near 2 (0.94–1.04). The two CPUs of each
+  core type agree within the scatter.
+
+**What it means, in plain words.**
+1. **The slow E-core form is one micro-op, not two.** `lea rax,[rax+rcx+0]` is 1.0 micro-op on
+   Gracemont, the same as the fast form, yet the cycle counter confirms it takes 2 cycles. So the
+   extra cycle happens *inside* one micro-op; the instruction is not split into two steps. This fits
+   the picture in our hypothesis: one address unit that needs a second pass to add the displacement.
+   It doesn't prove how that unit is built. It also fits the throughput result from Part 2 (1 per
+   cycle instead of 4): a slower micro-op that only one unit accepts, or that blocks its unit for
+   2 cycles, would do that. The counters can't say which.
+2. **The 16-bit `lea ax,[rax+rcx]` on Gracemont is about 3 micro-ops, about 2 of them from the
+   microcode ROM.** That ROM is the CPU's slow path for unusual instructions, and it explains the
+   ≈3.6 cycles for both latency and throughput. The exact count (2.8–3.0 on average) is noisy, but
+   "about 3, mostly microcode" is clear.
+3. **On the P-core, 16-bit `lea` is split into 2 micro-ops**, with no microcode. A likely reason:
+   writing only the low 16 bits of `rax` needs an extra step to merge them with the upper bits.
+   That would match its 2-cycle latency, but the counters only show that a second micro-op exists,
+   not what it does.
+4. On the P-core, adding `+0` changes nothing: 1 micro-op and 1 cycle either way.
+
+Raw VTune output is in `vtune/raw/` (`*_hw.csv` = per-CPU counts, `*.csv` = summaries), with the
+logs `vtune/run.log` and `vtune/probe.log`, and the self-checker output in `vtune/self_checker.txt`.
+
+To reproduce (the script must run as administrator), after `run_all.py` has built `kernels.S`:
+```
+cd harness
+gcc -O2 -o uopcount.exe uopcount.c kernels.S
+powershell -ExecutionPolicy Bypass -File ..\results_mine\vtune\measure_uops.ps1
+python ..\results_mine\scripts\uops_table.py
+```
 
 ## Files in this folder
 
@@ -200,7 +266,8 @@ To install and run it:
 | `encodings.txt` | disassembly of every new kernel, proving the bytes match the labels |
 | `fig_mine_*.png` | the three figures |
 | `raw/` | unprocessed per-CPU output of `bench.exe` |
-| `scripts/` | `compare.py`, `plot_mine.py`, `check_encodings.py` |
+| `scripts/` | `compare.py`, `plot_mine.py`, `check_encodings.py`, `uops_table.py` (Part 4), `plot_slides.py` (slide figures) |
+| `vtune/` | Part 4: `measure_uops.ps1`, `uops.csv`, logs and raw VTune reports |
 
 To reproduce, from `harness/`:
 ```

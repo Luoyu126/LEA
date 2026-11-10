@@ -1,0 +1,116 @@
+﻿C:\Program Files (x86)\Intel\oneAPI\vtune\2026.6\bin64\\self_check.py:56: SyntaxWarning: "\S" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\S"? A raw string is also an option.
+  GH_CHECK_LSC_SLM_ANALYSIS = "GPU Compute/Media Hotspots (characterization mode: LSC\SLM Accesses)" # Not user visible
+Intel(R) VTune(TM) Profiler Self Check Utility
+Copyright (C) 2009 Intel Corporation. All rights reserved.
+Build Number: 633341
+
+HW event-based analysis (counting mode)...
+HW event-based analysis (counting mode)   
+Example of analysis types: Performance Snapshot
+    Collection: Ok
+vtune: Warning: To collect hardware events, run the product as administrator.
+Running finalization...
+    Finalization: Ok
+    Report: Ok
+
+Instrumentation based analysis check...
+Instrumentation based analysis check   
+Example of analysis types: Hotspots and Threading with user-mode sampling
+    Collection: Ok
+vtune: Warning: Microarchitecture performance insights will not be available. Make sure the sampling driver is installed and enabled on your system.
+vtune: Warning: To collect microarchitecture performance insights, run the product as administrator.
+Running finalization...
+    Finalization: Ok
+    Report: Ok
+
+HW event-based analysis check...
+HW event-based analysis check   
+Example of analysis types: Hotspots with HW event-based sampling, HPC Performance Characterization, etc.
+    Collection: Fail
+vtune: Error:  Cannot enable Hardware Event-Based Sampling or Hardware Tracing. Please check the following:
+        
+           * Check that the Sampling Driver is loaded (see the Install the Sampling Drivers for Windows Targets help topic for details).
+
+           * Run the product as administrator to collect hardware events.
+
+        
+
+HW event-based analysis check...
+HW event-based analysis check   
+Example of analysis types: Microarchitecture Exploration
+    Collection: Fail
+vtune: Error:  Cannot enable Hardware Event-Based Sampling or Hardware Tracing. Please check the following:
+        
+           * Check that the Sampling Driver is loaded (see the Install the Sampling Drivers for Windows Targets help topic for details).
+
+           * Run the product as administrator to collect hardware events.
+
+        
+
+HW event-based analysis with uncore events...
+HW event-based analysis with uncore events   
+Example of analysis types: Memory Access
+    Collection: Fail
+vtune: Error: Memory Access analysis is not supported inside a virtual machine since uncore events cannot be collected. For full functionality, consider using a bare-metal environment.
+vtune: Error: Cannot collect memory bandwidth data. Make sure the sampling driver is installed and enabled on your system. See the Sampling Drivers help topic for more details. Note that memory bandwidth collection is not possible if you are profiling inside a virtualized environment.
+
+HW event-based analysis with stacks...
+HW event-based analysis with stacks   
+Example of analysis types: Hotspots with HW event-based sampling and call stacks
+    Collection: Fail
+vtune: Error:  Cannot enable Hardware Event-Based Sampling or Hardware Tracing. Please check the following:
+        
+           * Check that the Sampling Driver is loaded (see the Install the Sampling Drivers for Windows Targets help topic for details).
+
+           * Run the product as administrator to collect hardware events.
+
+        
+
+HW event-based analysis with context switches...
+HW event-based analysis with context switches   
+Example of analysis types: Threading with HW event-based sampling
+    Collection: Fail
+vtune: Error:  Cannot enable Hardware Event-Based Sampling or Hardware Tracing. Please check the following:
+        
+           * Check that the Sampling Driver is loaded (see the Install the Sampling Drivers for Windows Targets help topic for details).
+
+           * Run the product as administrator to collect hardware events.
+
+        
+
+Checking DPC++ application as prerequisite for GPU analyses...
+Checking DPC++ application as prerequisite for GPU analyses: Fail
+Unable to run DPC++ application on GPU connected to this system. If you are using an Intel GPU and want to verify profiling support for DPC++ applications, check these requirements:
+
+* Install Intel(R) GPU driver.
+
+* Install Intel(R) Level Zero GPU runtime.
+
+* Install Intel(R) oneAPI DPC++ Runtime and set the environment.
+
+The check observed a product failure on your system.
+Review errors in the output above to fix a problem or contact Intel technical support.
+
+
+The system is ready for the following analyses:
+* Performance Snapshot
+
+* Hotspots and Threading with user-mode sampling
+
+
+The following analyses have failed on the system:
+* Hotspots with HW event-based sampling, HPC Performance Characterization, etc.
+
+* Microarchitecture Exploration
+
+* Memory Access
+
+* Hotspots with HW event-based sampling and call stacks
+
+* Threading with HW event-based sampling
+
+* GPU Compute/Media Hotspots (characterization mode)
+
+* GPU Compute/Media Hotspots (source analysis mode)
+
+Log location: C:\Users\ziqix\AppData\Local\Temp\vtune-tmp-ziqix\self-checker-2026.11.10_10.43.33\log.txt
