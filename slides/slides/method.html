@@ -27,6 +27,6 @@
       </div>
     </div>
   </div>
-  <p id="e2-1bisugg" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">3 / 12</p>
+  <p id="e2-1bisugg" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">3 / 8</p>
   <aside>This is how we tested the prediction. The four steps are in the order they happen, which is what the arrows mean. The chain means each instruction waits for the previous result, so we measure latency. We wrote the bytes by hand because an assembler silently removes a +0. Pinning matters because the three core types give different answers. The cycle count comes from the timestamp counter, calibrated against a known 1-cycle instruction, measured right next to each kernel so frequency changes cancel. Two things worth saying out loud but not on the slide: we ran natively on Windows rather than WSL, because WSL cannot pin to a core type and showed about twenty per cent noise against two per cent native; and we repeated everything on a second laptop, an i7-13700H, where the calibration held even though the clock differed by about thirty-five per cent between the battery and AC runs.</aside>
 </section>

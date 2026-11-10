@@ -19,6 +19,6 @@
       <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.45; color:#6b7480">i7-13700H, cycles (throughput: per instruction). r8 = 0, so every form hits the same address.</p>
     </div>
   </div>
-  <p id="e2-11f8v3r" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">10 / 12</p>
+  <p id="e2-11f8v3r" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">Appendix 2</p>
   <aside>Backup, if asked whether real memory instructions pay too. We asked whether real memory instructions pay the same penalty. We took the same address, base plus index, and timed it with and without a plus-zero displacement in loads, stores and add with a memory operand, both latency and throughput. On both cores, every pair is identical. Only LEA, the top row, gets slower. That fits our hypothesis: a real memory address is likely computed by the load unit’s own address adder, which would take base, index and displacement at once. In our model, LEA on the E-core uses the two-input adder instead. This is consistent with the model; timing alone can’t prove it.</aside>
 </section>

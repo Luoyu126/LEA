@@ -1,6 +1,6 @@
 # 5-minute talk: adding zero to an LEA
 
-Script for the 12-slide deck: **8 slides presented** (1–8) and **4 backup slides** (9–12) that are
+Script for the 12-slide deck: **8 slides presented** (1–8) and **4 appendix slides** that are
 only reached if someone asks. Data: `zero_disp.csv`, `results_mine/compare_zero_disp.csv`,
 `results_mine/vtune/uops.csv`, `realcode.csv`.
 
@@ -105,7 +105,7 @@ two rows; neither P-core ever does.**
   `[rbp+rax*1]` without a displacement byte, so it is always secretly `[rbp+rax*1+0]`. `rsp`/`r12`,
   which need a SIB byte instead, are fast.
 - If asked about the two `0.17` cells: Raptor Cove resolves a small constant at rename, before
-  execution — Lion Cove does not do that for LEA. Backup slide 12.
+  execution — Lion Cove does not do that for LEA. Appendix 4.
 
 ## 6 · Our proposed pipelines (0:40)
 
@@ -145,27 +145,29 @@ sketch — but counters can't show how the adder is built."
 
 ---
 
-## Backup slides (9–12)
+## Appendix slides
+
+The presented deck is numbered 1–8; the four that follow are footered **Appendix 1–4**.
 
 | # | slide | reach for it when asked… |
 |---|---|---|
-| 9 | Does it replicate? A second chip. | "could this just be your one chip?" |
-| 10 | Only LEA pays. | "do real loads and stores pay it too?" |
-| 11 | Prefixes and sizes keep the rule. | "what about 32-bit addressing, or smaller destinations?" |
-| 12 | A small constant is almost free. | "why is there a 0.17 on slide 5?" |
+| Appendix 1 | Does it replicate? A second chip. | "could this just be your one chip?" |
+| Appendix 2 | Only LEA pays. | "do real loads and stores pay it too?" |
+| Appendix 3 | Prefixes and sizes keep the rule. | "what about 32-bit addressing, or smaller destinations?" |
+| Appendix 4 | A small constant is almost free. | "why is there a 0.17 on slide 5?" |
 
-- **9 · Second chip.** Gracemont is one E-core generation *older* than Skymont and shows the same
+- **Appendix 1 · Second chip.** Gracemont is one E-core generation *older* than Skymont and shows the same
   rule, so the quirk predates Arrow Lake. The throughput penalty is **worse** there: 4× (4 per cycle
   → 1) against about 2× on Skymont. Latency is 1 → 2 on both. So Skymont softened the throughput
   cost while keeping the latency cost — this looks like a deliberate trade-off, not a bug.
-- **10 · Only LEA pays.** With the same address, loads, stores and `add rax,[mem]` are identical
+- **Appendix 2 · Only LEA pays.** With the same address, loads, stores and `add rax,[mem]` are identical
   with and without `+0`, in latency *and* throughput, on both cores. The AGU computes the address
   for free; only the ALU charges for this form.
-- **11 · Prefixes and sizes.** The rule survives the `0x67` prefix (32-bit addressing) and a 32-bit
+- **Appendix 3 · Prefixes and sizes.** The rule survives the `0x67` prefix (32-bit addressing) and a 32-bit
   destination, so it is not about the 64-bit adder width. RIP-relative is unaffected by its
   displacement value. A 16-bit destination is slow for *every* form (2 cycles on the P-core,
   ≈3.6 on Gracemont) and so hides the `+0` effect entirely.
-- **12 · Small constants.** On Raptor Cove, `lea rax,[rax+k]` and `add rax,k` behave identically:
+- **Appendix 4 · Small constants.** On Raptor Cove, `lea rax,[rax+k]` and `add rax,k` behave identically:
   0.17 cycles for k = 0 or ±1, 0.33 at 127/128, 0.52 at 1023/−1024, and a normal 1.00 from 1024 on.
   Only the **value** matters, not disp8 vs disp32 — the exact mirror of the E-core effect, which
   depends on the **encoding** and ignores the value. One core reads the value, the other reads the form.
@@ -201,8 +203,8 @@ gone unnoticed. But gcc does emit the scaled 3-component LEA, `-march=gracemont`
 | frequency / turbo | per-measurement `add rax,rcx` calibration; `imul` comes out at expected integers |
 | noise | 7 reps, two CPUs per core type, agreement within ±2% |
 | a bug in our harness | every value matches uops.info (ARL-P, ARL-E, MTL-E) |
-| just this one chip | replicated on a second chip, one E-core generation older (slide 9) |
-| the 64-bit adder width | the `0x67` prefix and a 32-bit destination still pay (slide 11) |
+| just this one chip | replicated on a second chip, one E-core generation older (Appendix 1) |
+| the 64-bit adder width | the `0x67` prefix and a 32-bit destination still pay (Appendix 3) |
 
 **Calibration mistake worth admitting.** The AI-drafted plan said to calibrate with `add rax,1`. On
 these cores that costs about 0.17 cycles, not 1, because the renamer folds immediate adds — every

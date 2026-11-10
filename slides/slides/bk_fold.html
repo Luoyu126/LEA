@@ -17,6 +17,6 @@
       <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.45; color:#6b7480">i7-13700H, latency in cycles. The 285H’s Lion Cove takes 1 cycle for lea rax,[rax+8].</p>
     </div>
   </div>
-  <p id="e2-t0atpo" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">12 / 12</p>
+  <p id="e2-t0atpo" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">Appendix 4</p>
   <aside>Backup, for the 0.17 cycles that shows up on the second chip. On the Raptor Cove P-core, lea rax,[rax+k] and add rax,k behave the same, and both are much faster than one cycle when k is small: about 6 per cycle for k of 0 or 1. Up to 1023 and down to minus 1024 it is still below one cycle, but it costs more as k grows. From 1024 on it is a normal 1-cycle add. Whether the constant is stored in 1 byte or 4 makes no difference; only its value counts. That is the opposite of the E-core effect, which depends on the encoding and not on the value. The Lion Cove P-core on the 285H did not do this for LEA.</aside>
 </section>
