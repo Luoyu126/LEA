@@ -98,3 +98,32 @@ displacement takes 2 cycles instead of 1, whatever their values, even when the r
 
 Limitation: the internal mechanism (why index + displacement is slower on E-cores) is a
 hypothesis. Windows exposes no per-port counters, so we can't see inside the core.
+
+## Backup slide — "one cycle, who cares?"
+
+Not in the 5 minutes; this is the answer to the question we will get. Full table in
+`SUMMARY.md` Exp 5, data in `realcode.csv`, emitted assembly in `codegen/real_kernels.s`.
+
+We measured gcc `-O2` output, not hand-written assembly. Cycles per loop iteration:
+
+| compiler-generated loop | P | E | LP-E |
+|---|---|---|---|
+| `x = x + y*4 + 8` — the LEA is on the loop-carried chain | 2.00 | 2.01 | 2.02 |
+| the same, restructured so only an `add` is on the chain | **1.00** | **1.48** | 2.11 |
+| `a[idx[k]+1]` — the same addressing form inside a **load** | 1.02 | 1.07 | 1.76 |
+| `a[idx[k]]` — the same load without the displacement | 1.02 | 1.06 | 1.75 |
+
+Three things to say:
+
+- **It is real: a clean 2× on a dependency chain**, and restructuring the source recovers it
+  (2.00 → 1.00 on the P-core). On the LP E-core the fix doesn't help — that core is narrow enough
+  that the extra instruction costs what the shorter chain saves.
+- **Inside a load's addressing mode the displacement is free** on every core. The AGU computes it;
+  only the ALU charges for it. So this is not a reason to rewrite your array code.
+- **gcc never emits the scale-1 form** we built the talk around: for `x + y + 8` it emits
+  `add` + `add imm`. The 3-component LEA shows up only with a real scale factor — which is
+  exactly why this effect has gone unnoticed. (And in that case the P-core also pays 2 cycles,
+  but for its own reason: the scale, not the displacement.)
+
+So: it costs a cycle only when scaled address arithmetic sits on a loop-carried chain. Narrow
+window — but gcc walks into it, `-march=gracemont` included.

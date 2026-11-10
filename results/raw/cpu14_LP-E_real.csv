@@ -1,0 +1,10 @@
+workload,cycles_median,cycles_min,cycles_max,cpu,eff_class
+w1_naive_chain,2.0163,1.8513,2.1327,14,0
+w1_split_chain,2.1085,1.7575,2.1300,14,0
+w1_naive_s1_chain,2.0084,1.6175,2.5672,14,0
+w1_split_s1_chain,2.0017,1.9506,2.0620,14,0
+w2_disp_L1,1.7628,1.6515,1.7845,14,0
+w2_nodisp_L1,1.7506,1.7209,1.7669,14,0
+w2_disp_mem,77.4804,75.7690,80.5048,14,0
+w2_nodisp_mem,78.6002,76.2864,81.2944,14,0
+w3_stride_L1,1.5121,1.4703,1.5398,14,0

@@ -1,0 +1,28 @@
+workload,what,cycles_median,cycles_min,cycles_max,core,cpu
+w1_naive_chain,lea 8[x+y*4] on the loop-carried chain,2.0002,1.0546,2.0586,P,0
+w1_split_chain,"same, split so only `add` is on the chain",1.0049,0.9467,1.0813,P,0
+w1_naive_s1_chain,"x+y+8: gcc emits add+add imm, no lea",1.1702,1.1426,1.1979,P,0
+w1_split_s1_chain,"same, split so only `add` is on the chain",1.0226,0.9786,1.1970,P,0
+w2_disp_L1,"base+index*8+disp8 as a load addressing mode, L1-resident",1.0230,0.9055,1.0339,P,0
+w2_nodisp_L1,"base+index*8 as a load addressing mode, L1-resident",1.0192,0.9765,1.0256,P,0
+w2_disp_mem,"base+index*8+disp8, random gather over 32 MB",17.4762,12.2638,26.5872,P,0
+w2_nodisp_mem,"base+index*8, random gather over 32 MB",23.0131,19.8601,25.6618,P,0
+w3_stride_L1,a[i*3+1] traversal: gcc strength-reduces to a pointer walk,0.9541,0.8584,1.0836,P,0
+w1_naive_chain,lea 8[x+y*4] on the loop-carried chain,2.0142,1.8959,2.1172,E,2
+w1_split_chain,"same, split so only `add` is on the chain",1.4790,1.4166,1.5848,E,2
+w1_naive_s1_chain,"x+y+8: gcc emits add+add imm, no lea",2.0111,1.8274,2.0715,E,2
+w1_split_s1_chain,"same, split so only `add` is on the chain",1.3477,1.2681,1.4633,E,2
+w2_disp_L1,"base+index*8+disp8 as a load addressing mode, L1-resident",1.0711,0.9741,1.1021,E,2
+w2_nodisp_L1,"base+index*8 as a load addressing mode, L1-resident",1.0582,0.9827,1.0886,E,2
+w2_disp_mem,"base+index*8+disp8, random gather over 32 MB",14.9856,12.2890,15.7785,E,2
+w2_nodisp_mem,"base+index*8, random gather over 32 MB",15.1727,12.3066,18.4130,E,2
+w3_stride_L1,a[i*3+1] traversal: gcc strength-reduces to a pointer walk,1.1448,1.0599,1.2426,E,2
+w1_naive_chain,lea 8[x+y*4] on the loop-carried chain,2.0163,1.8513,2.1327,LP-E,14
+w1_split_chain,"same, split so only `add` is on the chain",2.1085,1.7575,2.1300,LP-E,14
+w1_naive_s1_chain,"x+y+8: gcc emits add+add imm, no lea",2.0084,1.6175,2.5672,LP-E,14
+w1_split_s1_chain,"same, split so only `add` is on the chain",2.0017,1.9506,2.0620,LP-E,14
+w2_disp_L1,"base+index*8+disp8 as a load addressing mode, L1-resident",1.7628,1.6515,1.7845,LP-E,14
+w2_nodisp_L1,"base+index*8 as a load addressing mode, L1-resident",1.7506,1.7209,1.7669,LP-E,14
+w2_disp_mem,"base+index*8+disp8, random gather over 32 MB",77.4804,75.7690,80.5048,LP-E,14
+w2_nodisp_mem,"base+index*8, random gather over 32 MB",78.6002,76.2864,81.2944,LP-E,14
+w3_stride_L1,a[i*3+1] traversal: gcc strength-reduces to a pointer walk,1.5121,1.4703,1.5398,LP-E,14

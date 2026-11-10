@@ -87,6 +87,26 @@ Before focusing on the zero displacement we ran the four planned experiments on 
 - **Throughput** (`fig_exp2_lea_throughput.png`): on the E-core, scaled-index LEAs have 1-cycle latency
   but only 1 per cycle throughput.
 
+## Does it matter in real code?
+
+Everything above is hand-encoded assembly, so we also measured gcc `-O2` output
+(`realcode.csv`, emitted assembly in `results/codegen/real_kernels.s`). Cycles per loop iteration:
+
+| compiler-generated loop | P | E | LP-E |
+|---|---|---|---|
+| `x = x + y*4 + 8`, the `lea` on the loop-carried chain | 2.00 | 2.01 | 2.02 |
+| the same, restructured so only an `add` is on the chain | **1.00** | **1.48** | 2.11 |
+| `a[idx[k]+1]`, the same addressing form inside a **load** | 1.02 | 1.07 | 1.76 |
+| `a[idx[k]]`, the same load without the displacement | 1.02 | 1.06 | 1.75 |
+
+The penalty is a clean 2× when scaled address arithmetic sits on a loop-carried dependency chain,
+and restructuring the source recovers it — except on the LP E-core, which is narrow enough that the
+extra instruction costs what the shorter chain saves. Inside a load's addressing mode the
+displacement is **free** on every core: the AGU computes it, only the ALU charges for it. And gcc
+never emits the scale-1 form this project is named after — for `x + y + 8` it emits `add` + `add imm`,
+so the pure `[rax+rcx*1+0]` effect is not reachable from C, which is why it has gone unnoticed.
+Full table and caveats in `results/SUMMARY.md` (Exp 5).
+
 All LEA latency and throughput values match [uops.info](https://uops.info) (ARL-P, ARL-E, MTL-E rows).
 
 ## AI use
@@ -115,6 +135,9 @@ index + displacement on its own; the two-part `[rax*1+0]` is still slow, which r
 │   ├── gen.py                       defines every kernel; emits kernels.S / .h / .json
 │   ├── bench.c                      driver: core pinning, rdtsc calibration, 7-run medians
 │   ├── run_all.py                   build + run on chosen CPUs → results/*.csv
+│   ├── real_kernels.c               Exp 5: C loops compiled -O2, no hand-written encodings
+│   ├── realcode.c                   Exp 5 driver (same pinning + calibration as bench.c)
+│   ├── run_real.py                  build + run Exp 5 → results/realcode.csv
 │   ├── plot.py                      figures → results/*.png
 │   ├── relabel.py                   refresh CSV labels from kernels.json
 │   ├── codegen.c                    gcc -march codegen test (Exp 3E)
@@ -125,6 +148,7 @@ index + displacement on its own; the two-part `[rax*1+0]` is still slow, which r
 ├── results/
 │   ├── zero_disp.csv                zero-displacement study (6 CPUs, 180 rows)
 │   ├── results.csv                  Exp 0–4 on P / E / LP-E (216 rows)
+│   ├── realcode.csv                 Exp 5: gcc -O2 loops on P / E / LP-E (27 rows)
 │   ├── uops_info_reference.csv      reference values from uops.info
 │   ├── raw/                         unprocessed per-CPU output
 │   ├── codegen/                     gcc output per -march
@@ -144,6 +168,7 @@ Windows, with [WinLibs](https://winlibs.com) gcc and Python 3 (`pip install matp
 ```bash
 python run_all.py
 python run_all.py --only=ez --out=zero_disp.csv 0:P 10:P 2:E 6:E 14:LP-E 15:LP-E
+python run_real.py
 python plot.py
 python build_report.py report_template.html ../results/LEA_report.html
 ```

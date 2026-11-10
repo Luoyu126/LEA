@@ -1,8 +1,9 @@
 # x86 addressing-mode timing — results (native Windows, Intel Core Ultra 9 285H)
 
-Raw data: `results.csv` (216 rows), per-core raw output in `raw/`, reference values in
-`uops_info_reference.csv`, compiler output in `codegen/`, figures `fig_exp*.png`.
-Reproduce: `harness\run_all.py` (build + run, ~2 min) then `harness\plot.py`.
+Raw data: `results.csv` (216 rows), `realcode.csv` (Exp 5, 27 rows), per-core raw output in `raw/`,
+reference values in `uops_info_reference.csv`, compiler output in `codegen/`, figures `fig_exp*.png`.
+Reproduce: `harness\run_all.py` (build + run, ~2 min) then `harness\plot.py`;
+`harness\run_real.py` for Exp 5.
 
 ## Focus for the talk: `lea rax,[rax+rcx]` vs `lea rax,[rax+rcx+0]`
 
@@ -119,6 +120,56 @@ on the P-core, scaled LEA + `imul` = 0.69 c/pair and + `shlx` = 0.67 c/pair ≈ 
 (0.33 + 0.33), while + `add` = 0.35 c. So slow LEAs on Lion Cove compete for the same ~3 execution
 ports as multiply and shift, while fast LEAs can use all 6 ALUs.
 
+## Exp 5 — does it matter in compiler-generated code? (cycles per loop iteration)
+
+Everything above is a hand-encoded dependency chain. This experiment asks the obvious follow-up:
+in code gcc actually emits, does the penalty survive? Source: `harness/real_kernels.c`
+(compiled as its own `-O2` translation unit, each loop `noinline`), driver
+`harness/realcode.c`, data `realcode.csv`, emitted assembly `codegen/real_kernels.s`.
+Reproduce with `python run_real.py`.
+
+| workload | what gcc emitted | P | E | LP-E |
+|---|---|---|---|---|
+| W1 `x = x + y*4 + 8` | `lea rax,8[rax+r8*4]` **on the loop-carried chain** | **2.00** | **2.01** | **2.02** |
+| W1 split | `lea` off the chain + `add rax,r9` on it | **1.00** | **1.48** | 2.11 |
+| W1 `x = x + y + 8` | `add rax,[mem]` + `add rax,8` — **no lea at all** | 1.17 | 2.01 | 2.01 |
+| W1 split | same, `add` only on the chain | 1.02 | 1.35 | 2.00 |
+| W2 `a[idx[k]+1]`, L1 | `add rax,QWORD PTR 8[rcx+r8*8]` (disp in the **load**) | 1.02 | 1.07 | 1.76 |
+| W2 `a[idx[k]]`, L1 | `add rax,QWORD PTR [rcx+r8*8]` | 1.02 | 1.06 | 1.75 |
+| W2 random gather, 32 MB | same two forms, memory-latency bound | 17 / 23 | 15.0 / 15.2 | 77 / 79 |
+| W3 `a[i*3+1]` traversal | strength-reduced to `add rcx,24` + `add rax,[rcx]` | 0.95 | 1.14 | 1.51 |
+
+Four findings, in descending order of how much they should change what a programmer does:
+
+1. **The penalty is real but only on the critical path.** W1 naive costs 2 cycles per iteration on
+   *all three* core types — and splitting the computation so the LEA leaves the loop-carried chain
+   halves it on the P-core (2.00 → 1.00) and cuts 26% on the E-core (2.01 → 1.48). On the LP E-core
+   the fix does **nothing** (2.02 → 2.11): that core is narrow enough that the extra instruction
+   costs as much as the shortened chain saves.
+2. **Same number, different cause.** W1 naive is 2 cycles everywhere, but for different reasons:
+   on the P-core because of the `*4` **scale** (Exp 1: any scale costs the P-core a cycle), on the
+   E-cores because of **index + displacement**. A single benchmark number would have hidden this;
+   it only separates because Exp 1 mapped both rules first.
+3. **gcc never emits the headline form.** For `x + y + 8` (scale 1, the exact
+   `base+index+disp` form that is the subject of this project) gcc emits `add` + `add imm`, not a
+   LEA. The 3-component LEA appears only when there is a real scale factor. So the pure
+   `[rax+rcx*1+0]` effect is **not reachable from C** — which is also why nobody trips over it.
+   Note the P-core gets 1.17 c for that add-pair because the renamer folds `add rax,8` almost for
+   free, while both E-cores pay a full 2 cycles — so gcc's LEA-free choice buys nothing on E-cores.
+4. **Inside a load's addressing mode the displacement is free.** `8[rcx+r8*8]` — bit-for-bit the
+   form that costs an extra cycle as a LEA — costs **nothing** as a load address, on every core
+   (1.02/1.02 P, 1.07/1.06 E, 1.76/1.75 LP-E). This is Exp 4's conclusion reproduced in compiler
+   output: the AGU and the ALU are separate hardware, and only the ALU charges for this form.
+   And once the workload misses cache (15–79 cycles per access) the effect is 1–2 orders of
+   magnitude below the noise. The gather pair is *not* a controlled comparison of addressing forms
+   (the two variants touch different addresses, so cache-line behaviour differs) — the point is only
+   that nothing at this scale is visible.
+
+**Honest summary for the talk:** this costs you a cycle only when address-shaped arithmetic with a
+scale factor sits on a loop-carried dependency chain. Fold it into a load, let the compiler
+strength-reduce it, or miss cache, and it disappears. That is a narrow window — but gcc does walk
+into it (`-march=gracemont` included, Exp 3E), and inside that window it is a clean 2×.
+
 ## Alternate hypotheses — how each was handled
 
 | alternative | result |
@@ -139,6 +190,11 @@ ports as multiply and shift, while fast LEAs can use all 6 ALUs.
 - No port-level counters on Windows (needs VTune or native Linux) → port claims are by interference.
 - One logical CPU per core type; laptop ran on battery, Balanced power plan.
 - "LP-E = Crestmont" is inferred from matching uops.info MTL-E numbers, not from documentation.
+- Exp 5's "split" variants need an empty `asm` barrier to hold the split in place: without it gcc
+  sees identical dataflow and re-fuses the two steps back into one LEA. The barrier emits no
+  instruction, but it means the split loops are not purely what the compiler would choose.
+- Exp 5's memory-bound gather pair is not a controlled comparison of addressing forms: the two
+  variants read different addresses, so cache-line behaviour differs between them.
 
 ## AI-usage notes for the talk
 

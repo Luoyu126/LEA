@@ -4,5 +4,8 @@ harness/bench
 harness/kernels.S
 harness/kernels.h
 harness/kernels.json
+harness/realcode.exe
+harness/realcode
+harness/realk.s
 __pycache__/
 *.pyc
