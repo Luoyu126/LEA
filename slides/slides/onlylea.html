@@ -1,0 +1,25 @@
+<section id="onlylea" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;letter-spacing:2px;color:#B4461A">EXTENSION · OTHER INSTRUCTIONS</p>
+<h2 style="font-size:72px;font-weight:700;line-height:1.1">Only LEA pays.</h2>
+</div>
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:56px">
+<table style="font-size:28px;color:#13171D">
+<tr><th style="width:36%;text-align:left">instruction</th><th style="width:24%;text-align:left">measured</th><th style="width:10%;text-align:center;color:#2563C4">P</th><th style="width:10%;text-align:center;color:#2563C4">P +0</th><th style="width:10%;text-align:center;color:#B4461A">E</th><th style="width:10%;text-align:center;color:#B4461A">E +0</th></tr>
+<tr style="background:#FBE6DC"><td style="font-family:'JetBrains Mono', 'Courier New', monospace"><b>lea rax,[rax+rcx]</b></td><td>latency</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center;color:#B4461A">2</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">mov rax,[rax+r8]</td><td>load latency</td><td style="text-align:center">5</td><td style="text-align:center">5</td><td style="text-align:center">4</td><td style="text-align:center">4</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">mov r,[r10+r8]</td><td>load throughput</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">mov [rdi+r8],rax</td><td>store throughput</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">add rax,[rax+r8]</td><td>latency</td><td style="text-align:center">6</td><td style="text-align:center">6</td><td style="text-align:center">5</td><td style="text-align:center">5</td></tr>
+<tr><td style="font-family:'JetBrains Mono', 'Courier New', monospace">add r,[r10+r8]</td><td>throughput</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td><td style="text-align:center">0.5</td></tr>
+</table>
+<div style="display:flex;flex-direction:column;gap:28px">
+<p style="font-size:40px;line-height:1.3;font-weight:600">Loads, stores and add rax,[mem] take the same time with and without +0, on both cores.</p>
+<p style="font-size:28px;line-height:1.45;color:#4A5361">This fits the hypothesis: a memory address likely goes through the load unit’s own adder, which would handle all three parts at once.</p>
+<p style="font-size:24px;line-height:1.45;color:#6B7480">i7-13700H, cycles (throughput: per instruction). r8 = 0, so every form hits the same address.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">8 / 13</p>
+<aside>Next we asked whether real memory instructions pay the same penalty. We took the same address, base plus index, and timed it with and without a plus-zero displacement in loads, stores and add with a memory operand, both latency and throughput. On both cores, every pair is identical. Only LEA, the top row, gets slower. That fits our hypothesis: a real memory address is likely computed by the load unit’s own address adder, which would take base, index and displacement at once. In our model, LEA on the E-core uses the two-input adder instead. This is consistent with the model; timing alone can’t prove it.</aside>
+</section>

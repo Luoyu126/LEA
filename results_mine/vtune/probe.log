@@ -1,0 +1,219 @@
+﻿probe 2026-11-10T10:51:13  admin=False
+--- trying: INST_RETIRED.ANY,UOPS_RETIRED.SLOTS,UOPS_RETIRED.HEAVY,UOPS_RETIRED.MS,UOPS_RETIRED.ALL,UOPS_ISSUED.ANY,CPU_CLK_UNHALTED.THREAD,CPU_CLK_UNHALTED.CORE
+vtune.exe : vtune: Collection started. To stop the collection, either press CTRL-C or enter from another console 
+window: vtune -r C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\probe_E -command stop.
+At C:\Users\ziqix\downloads\LEA\results_mine\vtune\measure_uops.ps1:17 char:10
++     $c = & $vt -collect-with runsa -knob counting-mode=true -knob eve ...
++          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (vtune: Collecti... -command stop.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+add_rr_chain cpu=12 iters=200000 reps=25 loop_passes=5000000 (a 200-instruction body runs 1000000000 instructions; empty runs 0)
+vtune: Collection stopped.
+vtune: Using result path `C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\probe_E'
+
+vtune: Executing actions  0 %                                                  
+vtune: Executing actions  0 % Finalizing results                               
+vtune: Executing actions  0 % Finalizing the result                            
+vtune: Executing actions  0 % Clearing the database                            
+vtune: Executing actions  7 % Clearing the database                            
+vtune: Executing actions  7 % Loading raw data to the database                 
+vtune: Executing actions  7 % Loading 'systemcollector-14736-Abbyx.sc' file    
+vtune: Executing actions 12 % Loading 'systemcollector-14736-Abbyx.sc' file    
+vtune: Executing actions 12 % Loading 'C:\Users\ziqix\AppData\Local\Temp\lea_vt
+vtune: Executing actions 12 % Updating precomputed scalar metrics              
+vtune: Executing actions 14 % Updating precomputed scalar metrics              
+vtune: Executing actions 14 % Processing profile metrics and debug information 
+vtune: Executing actions 19 % Processing profile metrics and debug information 
+vtune: Executing actions 19 % Setting data model parameters                    
+vtune: Executing actions 19 % Resolving module symbols                         
+vtune: Executing actions 19 % Resolving thread name information                
+vtune: Executing actions 21 % Resolving thread name information                
+vtune: Executing actions 21 % Resolving call target names for dynamic code     
+vtune: Executing actions 24 % Resolving call target names for dynamic code     
+vtune: Executing actions 24 % Resolving interrupt name information             
+vtune: Executing actions 26 % Resolving interrupt name information             
+vtune: Executing actions 26 % Processing profile metrics and debug information 
+vtune: Executing actions 28 % Processing profile metrics and debug information 
+vtune: Executing actions 29 % Processing profile metrics and debug information 
+vtune: Executing actions 30 % Processing profile metrics and debug information 
+vtune: Executing actions 30 % Setting data model parameters                    
+vtune: Executing actions 30 % Precomputing frequently used data                
+vtune: Executing actions 30 % Precomputing frequently used data                
+vtune: Executing actions 31 % Precomputing frequently used data                
+vtune: Executing actions 32 % Precomputing frequently used data                
+vtune: Executing actions 33 % Precomputing frequently used data                
+vtune: Executing actions 34 % Precomputing frequently used data                
+vtune: Executing actions 35 % Precomputing frequently used data                
+vtune: Executing actions 36 % Precomputing frequently used data                
+vtune: Executing actions 36 % Updating precomputed scalar metrics              
+vtune: Executing actions 37 % Updating precomputed scalar metrics              
+vtune: Executing actions 37 % Discarding redundant overtime data               
+vtune: Executing actions 39 % Discarding redundant overtime data               
+vtune: Executing actions 39 % Saving the result                                
+vtune: Executing actions 41 % Saving the result                                
+vtune: Executing actions 42 % Saving the result                                
+vtune: Executing actions 49 % Saving the result                                
+vtune: Executing actions 50 % Saving the result                                
+vtune: Executing actions 50 % Generating a report                              
+vtune: Executing actions 50 % Setting data model parameters                    
+vtune: Executing actions 75 % Setting data model parameters                    
+
+Collection and Platform Info
+----------------------------
+Parameter                 probe_E                                                                             
+------------------------  ------------------------------------------------------------------------------------
+Application Command Line  C:\Users\ziqix\downloads\LEA\harness\uopcount.exe "12" "add_rr_chain" "200000" "25" 
+Operating System          Microsoft Windows 11                                                                
+Computer Name             Abbyx                                                                               
+Result Size               3500591                                                                             
+Collection start time     15:51:17 10/11/2026 UTC                                                             
+Collection stop time      15:51:18 10/11/2026 UTC                                                             
+Collector Type            Event-based counting driver                                                         
+
+CPU
+---
+Parameter          probe_E                                           
+-----------------  --------------------------------------------------
+Name               Intel(R) microarchitecture code named Raptorlake-P
+Frequency          2918000000                                        
+Logical CPU Count  20                                                
+
+Summary
+-------
+Elapsed Time:  0.304
+Paused Time:   0.0  
+CPI Rate:      0.870
+
+Event summary
+-------------
+Hardware Event Type      Core Type  Hardware Event Count:Self  Hardware Event Sample Count:Self  Events Per Sample  Precise:Self
+-----------------------  ---------  -------------------------  --------------------------------  -----------------  ------------
+CPU_CLK_UNHALTED.CORE    P-Core                             0                                12  [Unknown]                      
+CPU_CLK_UNHALTED.CORE    E-Core                    1549082824                                 8  [Unknown]                      
+CPU_CLK_UNHALTED.THREAD  P-Core                    1271087968                                12  [Unknown]                      
+CPU_CLK_UNHALTED.THREAD  E-Core                    1588569776                                 8  [Unknown]                      
+INST_RETIRED.ANY         P-Core                    1548596874                                12  [Unknown]                      
+INST_RETIRED.ANY         E-Core                    1738653772                                 8  [Unknown]                      
+UOPS_ISSUED.ANY          P-Core                    2003477486                                12  [Unknown]                      
+UOPS_ISSUED.ANY          E-Core                    1966301962                                 8  [Unknown]                      
+UOPS_RETIRED.ALL         P-Core                             0                                12  [Unknown]                      
+UOPS_RETIRED.ALL         E-Core                    1711603388                                 8  [Unknown]                      
+UOPS_RETIRED.HEAVY       P-Core                     305558424                                12  [Unknown]                      
+UOPS_RETIRED.HEAVY       E-Core                             0                                 8  [Unknown]                      
+UOPS_RETIRED.MS          P-Core                     208133978                                12  [Unknown]                      
+UOPS_RETIRED.MS          E-Core                      37678274                                 8  [Unknown]                      
+UOPS_RETIRED.SLOTS       P-Core                    1662327312                                12  [Unknown]                      
+UOPS_RETIRED.SLOTS       E-Core                             0                                 8  [Unknown]                      
+vtune: Executing actions 75 % Generating a report                              
+vtune: Executing actions 100 % Generating a report                             
+vtune: Executing actions 100 % done                                            
+vtune.exe : vtune: Collection started. To stop the collection, either press CTRL-C or enter from another console 
+window: vtune -r C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\probe_P -command stop.
+At C:\Users\ziqix\downloads\LEA\results_mine\vtune\measure_uops.ps1:17 char:10
++     $c = & $vt -collect-with runsa -knob counting-mode=true -knob eve ...
++          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (vtune: Collecti... -command stop.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+add_rr_chain cpu=2 iters=200000 reps=25 loop_passes=5000000 (a 200-instruction body runs 1000000000 instructions; empty runs 0)
+vtune: Collection stopped.
+vtune: Using result path `C:\Users\ziqix\AppData\Local\Temp\lea_vtune_results\probe_P'
+
+vtune: Executing actions  0 %                                                  
+vtune: Executing actions  0 % Finalizing results                               
+vtune: Executing actions  0 % Finalizing the result                            
+vtune: Executing actions  0 % Clearing the database                            
+vtune: Executing actions  7 % Clearing the database                            
+vtune: Executing actions  7 % Loading raw data to the database                 
+vtune: Executing actions  7 % Loading 'systemcollector-8288-Abbyx.sc' file     
+vtune: Executing actions 12 % Loading 'systemcollector-8288-Abbyx.sc' file     
+vtune: Executing actions 12 % Loading 'C:\Users\ziqix\AppData\Local\Temp\lea_vt
+vtune: Executing actions 12 % Updating precomputed scalar metrics              
+vtune: Executing actions 14 % Updating precomputed scalar metrics              
+vtune: Executing actions 14 % Processing profile metrics and debug information 
+vtune: Executing actions 19 % Processing profile metrics and debug information 
+vtune: Executing actions 19 % Setting data model parameters                    
+vtune: Executing actions 19 % Resolving module symbols                         
+vtune: Executing actions 19 % Resolving thread name information                
+vtune: Executing actions 21 % Resolving thread name information                
+vtune: Executing actions 21 % Resolving call target names for dynamic code     
+vtune: Executing actions 24 % Resolving call target names for dynamic code     
+vtune: Executing actions 24 % Resolving interrupt name information             
+vtune: Executing actions 26 % Resolving interrupt name information             
+vtune: Executing actions 26 % Processing profile metrics and debug information 
+vtune: Executing actions 28 % Processing profile metrics and debug information 
+vtune: Executing actions 29 % Processing profile metrics and debug information 
+vtune: Executing actions 30 % Processing profile metrics and debug information 
+vtune: Executing actions 30 % Setting data model parameters                    
+vtune: Executing actions 30 % Precomputing frequently used data                
+vtune: Executing actions 30 % Precomputing frequently used data                
+vtune: Executing actions 31 % Precomputing frequently used data                
+vtune: Executing actions 32 % Precomputing frequently used data                
+vtune: Executing actions 33 % Precomputing frequently used data                
+vtune: Executing actions 34 % Precomputing frequently used data                
+vtune: Executing actions 35 % Precomputing frequently used data                
+vtune: Executing actions 36 % Precomputing frequently used data                
+vtune: Executing actions 36 % Updating precomputed scalar metrics              
+vtune: Executing actions 37 % Updating precomputed scalar metrics              
+vtune: Executing actions 37 % Discarding redundant overtime data               
+vtune: Executing actions 39 % Discarding redundant overtime data               
+vtune: Executing actions 39 % Saving the result                                
+vtune: Executing actions 41 % Saving the result                                
+vtune: Executing actions 42 % Saving the result                                
+vtune: Executing actions 49 % Saving the result                                
+vtune: Executing actions 50 % Saving the result                                
+vtune: Executing actions 50 % Generating a report                              
+vtune: Executing actions 50 % Setting data model parameters                    
+vtune: Executing actions 75 % Setting data model parameters                    
+
+Collection and Platform Info
+----------------------------
+Parameter                 probe_P                                                                            
+------------------------  -----------------------------------------------------------------------------------
+Application Command Line  C:\Users\ziqix\downloads\LEA\harness\uopcount.exe "2" "add_rr_chain" "200000" "25" 
+Operating System          Microsoft Windows 11                                                               
+Computer Name             Abbyx                                                                              
+Result Size               3500384                                                                            
+Collection start time     15:51:27 10/11/2026 UTC                                                            
+Collection stop time      15:51:27 10/11/2026 UTC                                                            
+Collector Type            Event-based counting driver                                                        
+
+CPU
+---
+Parameter          probe_P                                           
+-----------------  --------------------------------------------------
+Name               Intel(R) microarchitecture code named Raptorlake-P
+Frequency          2918000000                                        
+Logical CPU Count  20                                                
+
+Summary
+-------
+Elapsed Time:  0.242
+Paused Time:   0.0  
+CPI Rate:      0.844
+
+Event summary
+-------------
+Hardware Event Type      Core Type  Hardware Event Count:Self  Hardware Event Sample Count:Self  Events Per Sample  Precise:Self
+-----------------------  ---------  -------------------------  --------------------------------  -----------------  ------------
+CPU_CLK_UNHALTED.CORE    P-Core                             0                                12  [Unknown]                      
+CPU_CLK_UNHALTED.CORE    E-Core                     236554556                                 8  [Unknown]                      
+CPU_CLK_UNHALTED.THREAD  P-Core                    2139473492                                12  [Unknown]                      
+CPU_CLK_UNHALTED.THREAD  E-Core                     309957670                                 8  [Unknown]                      
+INST_RETIRED.ANY         P-Core                    2525948474                                12  [Unknown]                      
+INST_RETIRED.ANY         E-Core                     377359452                                 8  [Unknown]                      
+UOPS_ISSUED.ANY          P-Core                    2918353006                                12  [Unknown]                      
+UOPS_ISSUED.ANY          E-Core                     487174338                                 8  [Unknown]                      
+UOPS_RETIRED.ALL         P-Core                             0                                12  [Unknown]                      
+UOPS_RETIRED.ALL         E-Core                     409639392                                 8  [Unknown]                      
+UOPS_RETIRED.HEAVY       P-Core                     270928376                                12  [Unknown]                      
+UOPS_RETIRED.HEAVY       E-Core                             0                                 8  [Unknown]                      
+UOPS_RETIRED.MS          P-Core                     166754704                                12  [Unknown]                      
+UOPS_RETIRED.MS          E-Core                      19113592                                 8  [Unknown]                      
+UOPS_RETIRED.SLOTS       P-Core                    2594148354                                12  [Unknown]                      
+UOPS_RETIRED.SLOTS       E-Core                             0                                 8  [Unknown]                      
+vtune: Executing actions 75 % Generating a report                              
+vtune: Executing actions 100 % Generating a report                             
+vtune: Executing actions 100 % done                                            
+PROBE OK with: INST_RETIRED.ANY,UOPS_RETIRED.SLOTS,UOPS_RETIRED.HEAVY,UOPS_RETIRED.MS,UOPS_RETIRED.ALL,UOPS_ISSUED.ANY,CPU_CLK_UNHALTED.THREAD,CPU_CLK_UNHALTED.CORE

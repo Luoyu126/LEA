@@ -21,14 +21,14 @@
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;background:#E6EAEF;border-radius:8px;padding:8px 16px">disp</p>
 </div>
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:26px;color:#4A5361">↓ one cycle: 3-to-2, then add</p>
-<p style="font-size:28px;line-height:1.45;color:#4A5361">Missing parts are fed in as 0, so every form takes one cycle.</p>
+<p style="font-size:28px;line-height:1.45;color:#4A5361">Missing parts are fed in as 0, so every unscaled form takes one cycle.</p>
 </div>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;background:#E6EAEF;border-radius:16px;padding:28px 36px">
 <p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;color:#B4461A">OUR ANSWER TO THE QUESTION, AS A PREDICTION</p>
-<p style="font-size:30px;line-height:1.4"><b>Yes, on E-cores.</b> If the E-core adds only two inputs per cycle, equivalent addresses written in different modes must cost differently: <b>2 cycles whenever an index and a displacement occur together</b>, 1 otherwise, even when the displacement is 0. The P-core’s 3-input adder predicts no difference.</p>
+<p style="font-size:30px;line-height:1.4"><b>Yes, on E-cores.</b> If the E-core adds only two inputs per cycle, equivalent addresses written in different modes must cost differently: <b>2 cycles whenever an index and a displacement occur together</b>, 1 otherwise, even when the displacement is 0. The P-core’s 3-input adder predicts no difference for unscaled forms.</p>
 </div>
 <p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
-<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">3 / 8</p>
-<aside>This is our hypothesis, before the results. On the E-core, imagine the address adder has two inputs, and the index and displacement compete for the same one. Any two parts fit in one cycle, but index plus displacement needs a second pass. The P-core would use a three-input adder, feeding zero for missing parts. This answers the question on the cover: yes, equivalent addresses can take different time depending on the mode, but only on cores built like this. On E-cores, any address with both an index and a displacement should cost 2 cycles, even when the displacement is zero; on the P-core, every form should cost 1. After the pipeline sketch and our method, the test checks exactly that.</aside>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">3 / 13</p>
+<aside>This is our hypothesis, before the results. On the E-core, imagine the address adder has two inputs, and the index and displacement compete for the same one. Any two parts fit in one cycle, but index plus displacement needs a second pass. The P-core would use a three-input adder, feeding zero for missing parts. This answers the question on the cover: yes, equivalent addresses can take different time depending on the mode, but only on cores built like this. On E-cores, any address with both an index and a displacement should cost 2 cycles, even when the displacement is zero; on the P-core, every unscaled form should cost 1. A scaled index, times 4 or times 8, is a separate cost: it takes 2 cycles on both P-cores we measured. After the pipeline sketch and our method, the test checks exactly that.</aside>
 </section>

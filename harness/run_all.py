@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build bench.exe, run every kernel on one CPU of each core type, write results.csv.
 
-Usage: python run_all.py [--only=PREFIX] [--out=NAME.csv] [cpu:label ...]   (default: 0:P 2:E 14:LP-E)
+Usage: python run_all.py [--only=PREFIX] [--out=NAME.csv] [--outdir=DIR] [cpu:label ...]   (default: 0:P 2:E 14:LP-E)
 cycles in results.csv are per *operation* (per instruction, x per_op for split sequences).
 """
 import csv
@@ -22,7 +22,9 @@ def build():
     subprocess.run(["gcc", "-O2", "-o", "bench.exe", "bench.c", "kernels.S"], cwd=HERE, check=True)
 
 
-def main(targets, only="", out_name="results.csv"):
+def main(targets, only="", out_name="results.csv", out_dir=OUT):
+    global OUT
+    OUT = out_dir
     build()
     meta = {k["name"]: k for k in json.load(open(os.path.join(HERE, "kernels.json")))}
     os.makedirs(os.path.join(OUT, "raw"), exist_ok=True)
@@ -46,11 +48,12 @@ def main(targets, only="", out_name="results.csv"):
         w = csv.DictWriter(f, COLS)
         w.writeheader()
         w.writerows(rows)
-    print(f"wrote {len(rows)} rows to results/{out_name}")
+    print(f"wrote {len(rows)} rows to {os.path.join(OUT, out_name)}")
 
 
 if __name__ == "__main__":
     opts = {a[2:].split("=")[0]: a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--")}
     args = [a for a in sys.argv[1:] if not a.startswith("--")] or ["0:P", "2:E", "14:LP-E"]
     main([(int(a.split(":")[0]), a.split(":")[1]) for a in args],
-         opts.get("only", ""), opts.get("out", "results.csv"))
+         opts.get("only", ""), opts.get("out", "results.csv"),
+         os.path.abspath(opts["outdir"]) if "outdir" in opts else OUT)

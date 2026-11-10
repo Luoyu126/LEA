@@ -9,3 +9,4 @@ harness/realcode
 harness/realk.s
 __pycache__/
 *.pyc
+harness/uopcount.exe

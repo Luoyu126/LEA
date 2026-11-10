@@ -1,0 +1,446 @@
+﻿Intel(R) VTune(TM) Profiler Command Line Tool
+Copyright (C) 2009 Intel Corporation. All rights reserved.
+
+ Hardware Event-based Sampling
+
+ To modify the analysis type, use the configuration options (knobs) as
+ follows:
+ -collect-with runsa -knob <knobName>=<knobValue>
+ Multiple -knob options are allowed and can be followed by additional
+ collect-with action options, as well as global options, if needed. 
+
+
+enable-pebs-collection
+
+  Collect event context information.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-stack-collection
+
+  Enable collection of call stacks.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-tasks-stack-collection
+
+  %EnableGpuTasksStacksCollectionDescription
+
+  Default value: false
+  Possible values: true false
+
+
+stack-size
+
+  Specify the size of a raw stack (in bytes) to process. Zero value means
+  unlimited size.
+
+  Default value: 0
+  Possible values: numbers between 0 and 2147483647 
+
+
+stack-type
+
+  Choose between software stack and hardware LBR-based stack types. Software 
+  stacks have no depth limitations and provide more data while hardware
+  stacks introduce less overhead. Typically, software stack type is
+  recommended unless the collection overhead becomes significant. Note that
+  hardware LBR stack type may not be available on all platforms.
+
+  Default value: software
+  Possible values: software software_lbr lbr 
+
+
+enable-lbr-collection
+
+  Capture Last Branch Records information.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-trip-counts
+
+  Obtain statistical estimation of loop trip counts based on hardware events.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-full-processor-trace
+
+  Profile with Full Intel Processor Trace.
+
+  Default value: false
+  Possible values: true false
+
+
+disable-ipt-ret-compression
+
+  Disable compression of return addresses by Intel Processor Trace to
+  minimize data loss in binary decoding errors.
+
+  Default value: false
+  Possible values: true false
+
+
+ipt-events
+
+  Enable event collection for code regions of interest.
+
+  Default value: false
+  Possible values: true false
+
+
+ipt-regions-to-load
+
+  Specify the max number (0-5000) of code regions of interest to load for
+  detailed analysis. Enter 0 for detailed analysis of all code regions.
+
+  Default value: 0
+  Possible values: numbers between 0 and 5000 
+
+
+max-region-duration
+
+  Specify max duration (0.001-1000ms) for code regions of interest to use for
+  detailed analysis.
+
+  Default value: 100
+  Possible values: numbers between 0.001 and 1000 
+
+
+process-kernel-binaries
+
+  Process code from kernel binaries, only entry points will be processed
+  otherwise.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-processor-trace-for-tsx
+
+  Analyze hotspots inside transactions using Intel Processor Trace.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-cycle-accurate-mode
+
+  Enable Intel Processor Trace Cycle Accurate Mode to associate clock cycles 
+  with each indirect branch (TIP packets) and the first branch in each
+  taken/not-taken(TNT) conditional branch packet.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-ring0-mode
+
+  Enable kernel profiling.
+
+  Default value: false
+  Possible values: true false
+
+
+event-mux-factor
+
+  Specify the number of samples for a trigger event to switch multiplexing
+  groups. This option affects only driver-based collections.
+
+  Default value: 5
+  Possible values: numbers between 1 and 2147483647 
+
+
+enable-user-tasks
+
+  Analyze the tasks, events, and counters specified in your code via the ITT 
+  API. This option causes a higher overhead and increases the result size.
+
+  Default value: false
+  Possible values: true false
+
+
+enable-system-cswitch
+
+  Analyze detailed scheduling layout for all threads on the system and
+  identify the nature of context switches for a thread (preemption or
+  synchronization).
+
+  Default value: false
+  Possible values: true false
+
+
+dram-bandwidth-limits
+
+  Evaluate maximum achievable local DRAM bandwidth before the collection
+  starts. This data is used to scale bandwidth metrics on the timeline and
+  calculate thresholds.
+
+  Default value: false
+  Possible values: true false
+
+
+collect-io-waits
+
+  Analyze the percentage of time each thread and CPU spends in I/O wait
+  state.
+
+  Default value: false
+  Possible values: true false
+
+
+io-mode
+
+  Enable to identify where threads are waiting or compute thread concurrency.
+  The collector instruments APIs, which causes higher overhead and increases 
+  result size.
+
+  Default value: off
+  Possible values: off stack nostack 
+
+
+sampling-interval
+
+  Specify an interval (in milliseconds) between CPU samples.
+
+  Default value: 1
+  Possible values: numbers between 0.01 and 1000 
+
+
+uncore-sampling-interval
+
+  Specify an interval (in milliseconds) between uncore event samples.
+
+  Default value: 10
+  Possible values: numbers between 1 and 100 
+
+
+event-config
+
+  Configure PMU events to collect with the hardware event-based sampling
+  collector. Use event-config=? to see the list of available events for the
+  target.
+
+  Default value: 
+  
+
+
+counting-mode
+
+  Choose between collecting detailed context data for each PMU event (such as
+  code or hardware context) or the counts of events. Counting mode introduces
+  less overhead but gives less information.
+
+  Default value: false
+  Possible values: true false
+
+
+gpu-sw-profiling-mode
+
+  Select a profiling mode: <ul> <li><b>Basic Blocks Latency</b> to identify
+  stall reasons or basic blocks latency due to algorithm inefficiencies.</li>
+  <li><b>Memory Latency</b> to explore memory access issues.</li>
+  <li><b>Dynamic Instruction Count</b> to analyze the frequency of executing 
+  GPU instructions, sorted by instruction type.</li> </ul> 
+
+  Default value: 0:0:2.0|none
+  
+
+
+gpu-sampling-interval
+
+  Specify an interval (in milliseconds) between GPU samples.
+
+  Default value: 0:0:2.0|1
+  
+
+
+stall-reasons-sampling-interval
+
+  Specifies sampling interval (in milliseconds) for stall reasons collection.
+  Applicable only for Source Analysis mode Stall reasons.
+
+  Default value: 0:0:2.0|0.0005
+  
+
+
+collect-programming-api
+
+  Analyze OpenCL and Intel Media SDK programs running on Intel Processor
+  Graphics. This option may affect the performance of your application on the
+  CPU side.
+
+  Default value: 0:0:2.0|false
+  
+
+
+gpu-counters-mode
+
+
+  Default value: 0:0:2.0|none
+  
+
+
+gpu-metrics-selected
+
+  Specify comma-separated list of GPU events to collect
+
+  Default value: 
+  
+
+
+enable-gpu-usage
+
+  Analyze frame rate and usage of Processor Graphics engines based on DirectX
+  pipeline events.
+
+  Default value: false
+  Possible values: true false
+
+
+gpu-kernels-to-profile
+
+  Specify comma-separated list of GPU computing task names. Use search
+  strings if necessary (* and . are supported). Invocations happen in this
+  format: <b>computing_task_name[#start_idx#step#stop_idx] </b>Default value:
+  *#1#1#4294967295 where computing_task_name : Name of GPU computing
+  task(default value *) start_idx : Number of the first invocation to be
+  profiled (default value 1) step_idx : Number of step idx invocation
+  (default value 1) stop_idx : Number of the last invocation to be profiled
+  (default value 4294967295, UNIT_MAX) 
+
+  Default value: *#1#1#4294967295
+  
+
+
+analyze-loops
+
+  Extend loop analysis to collect advanced loops information such as
+  instruction set usage and display analysis results by loops and functions.
+
+  Default value: false
+  Possible values: true false
+
+
+mrte-type
+
+  Choose a type of managed runtime to analyze.
+
+  Default value: java,dotnet
+  Possible values: java,dotnet 
+
+
+analyze-openmp
+
+  Instrument and analyze OpenMP regions to detect inefficiencies such as
+  imbalance, lock contention, or overhead on performing scheduling, reduction
+  and atomic operations.
+
+  Default value: false
+  Possible values: true false
+
+
+stack-unwind-limit
+
+  Stack unwinding limit size, in bytes
+
+  Default value: 8388608
+  Possible values: numbers between 0 and 2147483647 
+
+
+l0-metrics-config
+
+  Specifies list of metric groups to collect through L0 profiling API. The
+  syntax is
+  [device_type1:]group1,group2,...;[device_type2:]group1,group2,...;....
+
+  Default value: 
+  
+
+
+l0-sysman-config
+
+  Specifies configuration options for the Sysman API.
+
+  Default value: 
+  
+
+
+l0-sampling-type
+
+  Specifies either Event-based or Time-based sampling mode for metrics
+  collection. 
+
+  Default value: time
+  Possible values: event time 
+
+
+l0-sampling-interval
+
+  Specifies sampling interval (in milliseconds) for metric collection .
+  Applicable only for Time-based sampling type.
+
+  Default value: 1
+  Possible values: numbers between 0.01 and 1000 
+
+
+dump-compute-task-binaries
+
+  Enable dumping of compute task binary files. By default, this option is set
+  to "true". If in-kernel profiling or viewing compute task source-assembler 
+  code is not needed, disabling this option can reduce runtime overhead and
+  save disk space.
+
+  Default value: false
+  Possible values: true false
+
+
+itt-domains
+
+  Specify a comma-separated allow list of Instrumentation and Tracing
+  Technology API (ITT API) domain names to collect. Only ITT data associated 
+  with the specified domains will be collected. Leave empty or specify "all" 
+  to collect all domains. Format: domain1,domain2,domain3 (no spaces).
+
+  Default value: all
+  
+
+
+event-mode
+
+  Limit event-based sampling collection to OS or USER mode.
+
+  Default value: all
+  Possible values: all user os 
+
+
+enable-context-switches
+
+  Collect context switches.
+
+  Default value: false
+  Possible values: true false
+
+
+collect-hardware-trace
+
+
+  Default value: false
+  Possible values: true false
+
+
+analyze-ehfi-classes
+
+  Enable analysis of Enhanced Hardware Feedback Interface classes provided by
+  the hardware as guidance for the OS scheduler.
+
+  Default value: false
+  Possible values: true false
+
