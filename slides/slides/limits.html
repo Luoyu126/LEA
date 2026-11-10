@@ -1,27 +1,23 @@
-<section id="limits" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; padding:128px 128px 160px; background:#f3f5f7">
-  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:700; line-height:1.1; color:#13171d">AI use and open questions</h2>
-  <div style="display:grid; gap:32px; grid-template-columns:1fr 1fr">
-    <div style="display:flex; flex-direction:column; gap:20px; padding:36px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
-      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">What the AI got wrong</h3>
-      <ul style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">
-        <li>Its explanation of our result: “three address parts are slow”.</li>
-        <li>In the extension write-up: “7 or 8 per cycle” for a 0.25-cycle throughput, which is 4 per cycle.</li>
-      </ul>
-    </div>
-    <div style="display:flex; flex-direction:column; gap:20px; padding:36px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
-      <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">Answered and open</h3>
-      <ul style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">
-        <li><span style="color:#13171d"><b>Answered</b></span> with VTune: the slow form is one micro-op that takes 2 cycles, not two micro-ops.</li>
-        <li><span style="color:#13171d"><b>Open:</b></span> why the i7-13700H P-core did only 2 loads per cycle (Intel documents 3).</li>
-      </ul>
-    </div>
+<section id="limits" data-transition="fade" style="background:#f3f5f7">
+  <p id="e2-nq6ymd" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">8 / 12</p>
+  <h2 id="pb409d7cbe2e0r0-caab707e" style="position:absolute; top:128px; left:128px; width:1664px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:700; line-height:1.1; color:#13171d">AI use</h2>
+  <div id="60981e12" style="position:absolute; top:311.08px; left:104.91px; width:816px; height:529px; display:flex; flex-direction:column; gap:20px; padding:36px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
+    <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">What we used Claude for</h3>
+    <ul style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; line-height:1.45; color:#4a5361">
+      <li>Drafting the original experiment plan.</li>
+      <li>Writing the harness: kernel generator, timing driver, figures.</li>
+      <li>Adding the compiler-output experiment and the VTune micro-op runs.</li>
+      <li>Drafting the write-ups and these slides.</li>
+    </ul>
   </div>
-  <div style="display:flex; flex-direction:column; gap:16px; padding:32px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
-    <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">Where we went further than the AI</h3>
-    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">We didn’t accept “the number of parts matters”. We insisted on testing <span style="color:#13171d"><b>index + disp</b></span> on its own: <span style="color:#13171d"><b>lea rax,[rax*1+0]</b></span> has only two parts, yet takes <span style="color:#b4461a"><b>2 cycles</b></span> on E-cores. Enumerating every combination showed the real rule: index and displacement together.</p>
+  <div id="82b7c17b" style="position:absolute; top:311.08px; left:952.91px; width:816px; height:529px; display:flex; flex-direction:column; gap:20px; padding:36px 40px; background:#fbfcfd; border:1px solid #d9dee4; border-radius:16px">
+    <h3 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:36px; font-weight:600; color:#13171d">Where we went further</h3>
+    <ul style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; line-height:1.45; color:#4a5361">
+      <li>Rejected its explanation, “three address parts are slow”. Testing index + disp alone — <span style="color:#13171d"><b>[rax*1+0]</b></span>, two parts, still 2 cycles — gave the real rule.</li>
+      <li>Caught its calibration error: it took add rax,1 as 1 cycle. It is 0.17, so every result came out <span style="color:#b4461a"><b>5–6× too high</b></span>.</li>
+      <li>Caught its arithmetic: “7 or 8 per cycle” for a 0.25-cycle throughput, which is 4.</li>
+      <li>Checked every number against the raw data.</li>
+    </ul>
   </div>
-  <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.45; color:#6b7480">The extension’s tests, analysis and slides were drafted with Claude Code and checked against the raw data.</p>
-  <p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
-  <p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">9 / 13</p>
-  <aside>On AI use: the plan was drafted with an LLM, and it carried outdated Skylake-era rules, which sanity checks and uops.info caught. The AI also explained our result as "three address parts are slow". We didn't accept that; we insisted on testing index plus displacement on its own, and on enumerating every combination. The two-part form lea rax,[rax*1+0] is still slow, which made the real rule clear: index and displacement together. For the extension, the tests, the analysis and these slides were drafted with Claude Code, and every number was checked against the raw data. That check caught one AI error: the write-up said the fast LEA runs 7 or 8 per cycle on Gracemont, but 0.25 cycles per instruction means 4 per cycle. One question from the extension is now answered. Timing couldn’t tell whether the slow form is two micro-ops or one slower micro-op, so we counted micro-ops with Intel VTune: on the Gracemont E-core the slow form is still one micro-op, and it takes 2 cycles. The details are on the last backup slide. One question is still open: the i7-13700H P-core did only 2 loads per cycle in our tests, where Intel documents 3, and we haven’t found out why.</aside>
+  <aside>On AI use. Claude drafted the original experiment plan, wrote the benchmark harness — the kernel generator, the timing driver and the figures — added the compiler-output experiment and the VTune micro-op runs, and drafted the write-ups and these slides. Where we went further: it explained our result as "three address parts are slow", and we did not accept that. We insisted on testing index plus displacement on its own, and the two-part form lea rax,[rax*1+0] is still two cycles, which gave the real rule: index and displacement together. We also caught two errors. Its plan said to calibrate with add rax,1 as a one-cycle reference; on these cores that costs about 0.17 cycles because the renamer folds immediate adds, so every number came out five to six times too high, and a second sanity check on imul caught it. And in the extension write-up it turned a 0.25-cycle throughput into seven or eight per cycle, when it is four. Every number on these slides was checked against the raw data.</aside>
 </section>

@@ -1,35 +1,31 @@
-<section id="question" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
-<h2 style="font-size:72px;font-weight:700;line-height:1.1">The question</h2>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:64px">
-<div style="display:flex;flex-direction:column;gap:32px">
-<p style="font-size:44px;line-height:1.3;font-weight:600">Can two instructions that compute the same value take different time, only because the address is encoded differently?</p>
-<p style="font-size:32px;line-height:1.4;color:#4A5361">We use LEA, which computes an address without touching memory, so caches can’t interfere.</p>
-</div>
-<div style="display:flex;flex-direction:column;gap:24px">
-<div style="display:flex;flex-direction:column;gap:16px;background:#FBFCFD;border:1px solid #D9DEE4;border-radius:16px;padding:40px">
-<h3 style="font-size:32px;font-weight:600">What the textbooks say (Skylake era)</h3>
-<ul style="font-size:28px;line-height:1.5;color:#4A5361">
-<li>3-part LEA (base + index + disp): 3 cycles</li>
-<li>RBP as the base: slow</li>
-<li>Scale factor (×2, ×4, ×8): free</li>
-</ul>
-</div>
-<div style="display:flex;flex-direction:column;gap:16px;background:#FBFCFD;border:1px solid #D9DEE4;border-radius:16px;padding:40px">
-<h3 style="font-size:32px;font-weight:600">Our CPUs</h3>
-<div style="display:flex;flex-direction:column;gap:12px">
-<p style="font-size:28px"><span style="color:#2563C4">■</span>  P-core · Lion Cove</p>
-<p style="font-size:28px"><span style="color:#D9581F">■</span>  E-core · Skymont</p>
-<p style="font-size:28px"><span style="color:#138A60">■</span>  LP E-core · Crestmont (inferred)</p>
-<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#B4461A">SECOND CHIP · i7-13700H</p>
-<div style="display:flex;gap:32px">
-<p style="font-size:28px"><span style="color:#2563C4">■</span>  P-core · Raptor Cove</p>
-<p style="font-size:28px"><span style="color:#D9581F">■</span>  E-core · Gracemont</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
-<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">2 / 13</p>
-<aside>LEA is ideal because it only does the address arithmetic, with no memory access, so any time difference comes from the addressing form itself. The textbook rules come from Skylake-era manuals. Our first chip, a Core Ultra 9 285H, has three different core designs, which turned out to matter. For the extension we added a second chip, an i7-13700H, with a Raptor Cove P-core and a Gracemont E-core. Gracemont is one generation older than Skymont.</aside>
+<section id="question" data-transition="fade" style="display:flex; flex-direction:column; justify-content:space-between; padding:128px 128px 160px; background:#f3f5f7">
+  <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:700; line-height:1.1; color:#13171d">What we measure, and on what</h2>
+  <div style="display:grid; gap:64px; grid-template-columns:3fr 2fr">
+    <div style="display:flex; flex-direction:column; gap:32px">
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; font-weight:600; letter-spacing:2px; color:#b4461a">1 · ONE COMPUTATION, FIVE ENCODINGS</p>
+      <table style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:32px; color:#13171d">
+        <tr><th style="width:48%; text-align:left">instruction</th><th style="width:52%; text-align:left">bytes</th></tr>
+        <tr><td>lea rax,[rax]</td><td>48 8D 00</td></tr>
+        <tr><td>lea rax,[rax+0]</td><td>48 8D 40 00</td></tr>
+        <tr><td>lea rax,[rax+rcx*1]</td><td>48 8D 04 08</td></tr>
+        <tr style="background:#fbe6dc"><td>lea rax,[rax*1+0]</td><td>48 8D 04 05 00 00 00 00</td></tr>
+        <tr style="background:#fbe6dc"><td>lea rax,[rax+rcx*1+0]</td><td>48 8D 44 08 00</td></tr>
+      </table>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:32px">
+      <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; font-weight:600; letter-spacing:2px; color:#b4461a">2 · FIVE CORES, THREE CLASSES</p>
+      <table style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:30px; color:#13171d">
+        <tr><th style="width:34%; text-align:left">class</th><th style="width:33%; text-align:left">285H</th><th style="width:33%; text-align:left">13700H</th></tr>
+        <tr><td style="color:#2563c4">P-core</td><td>Lion Cove</td><td>Raptor Cove</td></tr>
+        <tr><td style="color:#b4461a">E-core</td><td>Skymont</td><td>Gracemont</td></tr>
+        <tr><td style="color:#138a60">LP E-core</td><td>Crestmont</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:660px 1fr; gap:32px; align-items:center; padding:28px 40px; background:#e6eaef; border-radius:16px">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:34px; font-weight:600; line-height:1.3; color:#13171d">rcx = 0, every displacement = 0</p>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:34px; line-height:1.3; color:#4a5361">All five compute exactly rax, and differ only in their bytes.</p>
+  </div>
+  <p id="e2-1w9ohx" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">2 / 12</p>
+  <aside>Two things to set up. First, what we measure: one computation written five ways. Every legal combination of base, index and displacement, with rcx set to zero and every displacement zero, so all five instructions produce exactly the same value in rax and differ only in their encoded bytes. The shortest is three bytes, the longest eight. We write the bytes by hand because an assembler silently drops a plus zero. LEA is the right instruction for this because it does the address arithmetic and never touches memory, so no cache effect can creep in. Index on its own is missing because it cannot be encoded: with no base, x86 always adds a four-byte displacement. Second, where we measure: five cores in three classes, across two laptops. The Core Ultra 9 285H has a Lion Cove P-core, a Skymont E-core and a low-power Crestmont E-core; the i7-13700H has a Raptor Cove P-core and a Gracemont E-core, one generation older than Skymont. The two highlighted rows are the ones that will turn out to be slow.</aside>
 </section>

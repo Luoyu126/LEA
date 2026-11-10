@@ -1,17 +1,16 @@
-<section id="replicate" data-transition="fade" style="background:#F3F5F7;color:#13171D;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
-<div style="display:flex;flex-direction:column;gap:12px">
-<p style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:600;letter-spacing:2px;color:#B4461A">EXTENSION · SECOND CHIP</p>
-<h2 style="font-size:72px;font-weight:700;line-height:1.1">Does it replicate? A second chip.</h2>
-</div>
-<div style="display:grid;grid-template-columns:3fr 2fr;gap:56px">
-<img src="/_blob/da791ea5882828672d696202986edebd" alt="Bar chart of lea latency on the i7-13700H: the P-core takes 1 cycle for [rax+rcx], [rax+rcx+0], [rax+rcx+8] and [rax*1+0]; the Gracemont E-core takes 1 cycle for [rax+rcx] and 2 cycles for the other three. Black ticks show the 285H values, which are the same." style="width:960px;height:560px;object-fit:contain">
-<div style="display:flex;flex-direction:column;gap:28px">
-<p style="font-size:40px;line-height:1.3;font-weight:600">On an older E-core (Gracemont, i7-13700H), index + displacement still costs 2 cycles.</p>
-<p style="font-size:28px;line-height:1.45;color:#4A5361">Throughput drops 4× on Gracemont (4 per cycle → 1 per cycle), about 2× on Skymont. The quirk existed before Arrow Lake, and was worse.</p>
-<p style="font-size:24px;line-height:1.45;color:#6B7480">Bars: i7-13700H, two CPUs per core type. Black ticks: the 285H.</p>
-</div>
-</div>
-<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480">Abby Xiong · Yunyi Chen · LEA addressing-mode timing</p>
-<p style="position:absolute;right:128px;bottom:64px;width:200px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;color:#6B7480;text-align:right">7 / 13</p>
-<aside>We repeated the whole experiment on a second laptop, an i7-13700H. Its E-core, Gracemont, is one generation older than Skymont. The result is the same: as soon as an index and a displacement are both encoded, the E-core takes 2 cycles, even for plus zero, and even with no base. The P-core takes 1 cycle for all of these. Throughput is hit harder on Gracemont: the fast form runs 4 per cycle, the slow form only 1, a 4 times drop. On Skymont it was about 2 times. So this quirk is not new in Arrow Lake; it was there before, and it was worse.</aside>
+<section id="replicate" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; padding:128px 128px 160px; background:#f3f5f7">
+  <div style="display:flex; flex-direction:column; gap:12px">
+    <p style="font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; font-weight:600; letter-spacing:2px; color:#b4461a">BACKUP · SECOND CHIP</p>
+    <h2 style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:72px; font-weight:700; line-height:1.1; color:#13171d">Does it replicate? A second chip.</h2>
+  </div>
+  <div style="display:grid; gap:56px; grid-template-columns:3fr 2fr">
+    <img src="/_blob/da791ea5882828672d696202986edebd" alt="Bar chart of lea latency on the i7-13700H: the P-core takes 1 cycle for [rax+rcx], [rax+rcx+0], [rax+rcx+8] and [rax*1+0]; the Gracemont E-core takes 1 cycle for [rax+rcx] and 2 cycles for the other three. Black ticks show the 285H values, which are the same." style="width:960px; height:560px; object-fit:contain">
+    <div style="display:flex; flex-direction:column; gap:28px">
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:40px; font-weight:600; line-height:1.3; color:#13171d">On an older E-core (Gracemont, i7-13700H), index + displacement still costs 2 cycles.</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:28px; line-height:1.45; color:#4a5361">Throughput drops 4× on Gracemont (4 per cycle → 1 per cycle), about 2× on Skymont. The quirk existed before Arrow Lake, and was worse.</p>
+      <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; line-height:1.45; color:#6b7480">Bars: i7-13700H, two CPUs per core type. Black ticks: the 285H.</p>
+    </div>
+  </div>
+  <p id="e2-1p38cv8" style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'JetBrains Mono', 'Courier New', monospace; font-size:24px; text-align:right; color:#6b7480">9 / 12</p>
+  <aside>Backup, if asked whether it is just this one chip. We repeated the whole experiment on a second laptop, an i7-13700H. Its E-core, Gracemont, is one generation older than Skymont. The result is the same: as soon as an index and a displacement are both encoded, the E-core takes 2 cycles, even for plus zero, and even with no base. The P-core takes 1 cycle for all of these. Throughput is hit harder on Gracemont: the fast form runs 4 per cycle, the slow form only 1, a 4 times drop. On Skymont it was about 2 times. So this quirk is not new in Arrow Lake; it was there before, and it was worse.</aside>
 </section>

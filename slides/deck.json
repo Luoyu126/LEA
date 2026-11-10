@@ -20,40 +20,34 @@
   "order": [
     "cover",
     "question",
-    "model",
-    "pipeline",
     "method",
+    "model",
     "combos",
+    "pipeline",
+    "bk_uops",
+    "limits",
     "replicate",
     "onlylea",
-    "limits",
-    "takeaway",
     "bk_modes",
-    "bk_fold",
-    "bk_uops"
+    "bk_fold"
   ],
   "sections": {
     "s1": {
-      "description": "The question and our CPU",
+      "description": "The question, the experiment and how we measured",
       "start": "cover"
     },
     "s2": {
-      "description": "Our hypothesis: how P- and E-cores compute an address",
+      "description": "Our hypothesis, the test, and the micro-op count behind it",
       "start": "model"
     },
     "s3": {
       "before": null,
-      "description": "Testing the prediction: method and results",
-      "start": "method"
-    },
-    "s4": {
-      "before": null,
-      "description": "AI use and the takeaway",
+      "description": "AI use",
       "start": "limits"
     },
-    "s5": {
-      "description": "Backup: more results from the second chip",
-      "start": "bk_modes"
+    "s4": {
+      "description": "Backup: a second chip, other instructions, more LEA forms",
+      "start": "replicate"
     }
   },
   "title": "Adding Zero to an LEA"
