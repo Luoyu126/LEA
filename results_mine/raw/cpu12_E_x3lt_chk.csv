@@ -1,0 +1,3 @@
+kernel,cycles_median,cycles_min,cycles_max,add_ticks_median,cpu,eff_class
+x3lt_chk_lines,0.499,0.493,0.518,0.7952,12,0
+x3lt_chk_32,0.498,0.491,0.507,0.7947,12,0

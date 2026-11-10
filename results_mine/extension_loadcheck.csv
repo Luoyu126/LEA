@@ -1,0 +1,9 @@
+experiment,kernel,form,path,metric,cycles_median,cycles_min,cycles_max,core,cpu
+X3LT,x3lt_chk_lines,"mov r64,[r10+64*j] (8 different lines, check)",-,throughput,0.527,0.45,0.542,P,2
+X3LT,x3lt_chk_32,"mov r32,[r10] (32-bit loads, check)",-,throughput,0.529,0.447,0.542,P,2
+X3LT,x3lt_chk_lines,"mov r64,[r10+64*j] (8 different lines, check)",-,throughput,0.504,0.503,0.504,P,8
+X3LT,x3lt_chk_32,"mov r32,[r10] (32-bit loads, check)",-,throughput,0.503,0.501,0.509,P,8
+X3LT,x3lt_chk_lines,"mov r64,[r10+64*j] (8 different lines, check)",-,throughput,0.499,0.493,0.518,E,12
+X3LT,x3lt_chk_32,"mov r32,[r10] (32-bit loads, check)",-,throughput,0.498,0.491,0.507,E,12
+X3LT,x3lt_chk_lines,"mov r64,[r10+64*j] (8 different lines, check)",-,throughput,0.499,0.483,0.506,E,16
+X3LT,x3lt_chk_32,"mov r32,[r10] (32-bit loads, check)",-,throughput,0.498,0.497,0.5,E,16

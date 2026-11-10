@@ -1,0 +1,31 @@
+experiment,kernel,path,form,metric,mine_cpu2,mine_cpu8,mine_cpu12,mine_cpu16,theirs_P_LionCove,theirs_E_Skymont
+Z,ez_bi_base,base,[rax+rcx*1],latency,0.998,0.999,1.004,0.996,1.0,1.0
+Z,ez_bi_d8_0_base,base,[rax+rcx*1+0] disp8,latency,0.999,0.999,1.995,2.0,1.0,2.01
+Z,ez_bi_d32_0_base,base,[rax+rcx*1+0] disp32,latency,1.003,1.0,1.994,1.993,1.0,2.01
+Z,ez_bi_d8_8_base,base,[rax+rcx*1+8] disp8,latency,0.999,1.002,2.003,1.996,1.0,2.01
+Z,ez_bi_d8_m8_base,base,[rax+rcx*1-8] disp8,latency,0.998,0.998,1.998,1.997,1.0,2.01
+Z,ez_bi_d8_127_base,base,[rax+rcx*1+127] disp8,latency,0.999,0.998,2.003,1.996,0.99,2.01
+Z,ez_bi_d32_4k_base,base,[rax+rcx*1+4096] disp32,latency,0.996,1.0,1.994,2.002,1.0,2.01
+Z,ez_b_base,base,[rax],latency,0.178,0.185,0.998,0.998,1.0,1.0
+Z,ez_b_d8_0_base,base,[rax+0] disp8,latency,0.168,0.168,0.997,0.997,1.0,1.0
+Z,ez_b_d32_0_base,base,[rax+0] disp32,latency,0.168,0.168,0.997,1.003,1.0,1.0
+Z,ez_bi_index,index,[rcx+rax*1],latency,0.999,0.997,0.999,0.999,1.0,1.0
+Z,ez_bi_d8_0_index,index,[rcx+rax*1+0] disp8,latency,1.0,1.003,2.004,1.99,1.0,2.01
+Z,ez_rbx_index,index,[rbx+rax*1],latency,0.998,1.001,1.002,0.999,1.0,1.0
+Z,ez_rbp_d8_0_index,index,[rbp+rax*1+0] disp8 (forced),latency,1.0,0.998,1.995,1.993,1.0,2.0
+Z,ez_r13_d8_0_index,index,[r13+rax*1+0] disp8 (forced),latency,1.0,0.999,2.001,2.004,1.0,2.01
+Z,ez_rbp_d32_0_index,index,[rbp+rax*1+0] disp32,latency,1.0,1.0,2.002,2.0,1.0,2.01
+Z0,ez0_bi_base,base,"[rax+rcx*1], rcx=0",latency,0.999,1.0,0.998,1.004,1.0,1.0
+Z0,ez0_bi_d8_0_base,base,"[rax+rcx*1+0] disp8, rcx=0",latency,0.997,1.0,1.998,2.0,1.0,2.0
+Z0,ez0_bi_d32_0_base,base,"[rax+rcx*1+0] disp32, rcx=0",latency,1.004,1.001,2.006,2.008,1.0,2.01
+Z0,ez0_bi_index,index,"[rcx+rax*1], rcx=0 (rcx is base)",latency,0.997,0.998,1.001,0.999,1.0,1.0
+Z0,ez0_bi_d8_0_index,index,"[rcx+rax*1+0] disp8, rcx=0 (rcx is base)",latency,1.0,0.998,1.995,1.997,1.0,2.0
+ZI,ezi_i1_d32_0_index,index,"[rax*1+0] index+disp32, no base",latency,1.002,0.999,1.998,1.998,1.0,2.0
+ZI,ezi_i1_d32_8_index,index,"[rax*1+8] index+disp32, no base",latency,0.997,1.003,2.003,1.996,1.0,2.0
+ZI,ezi_i2_d32_0_index,index,"[rax*2+0] index*2+disp32, no base",latency,2.0,2.003,1.998,2.003,2.0,2.01
+ZI,ezi_rcx_rcx_index,index,"[rcx+rax*1] base+index, rcx=0",latency,1.002,0.999,0.997,0.996,1.0,1.0
+Z,ez_tp_bi,-,[r14+r15*1],throughput,0.201,0.201,0.252,0.252,0.17,0.13
+Z,ez_tp_bi_d8_0,-,[r14+r15*1+0] disp8,throughput,0.201,0.201,1.0,1.006,0.17,0.29
+Z,ez_tp_bi_d32_0,-,[r14+r15*1+0] disp32,throughput,0.202,0.202,0.998,0.997,0.17,0.3
+Z,ez_tp_b,-,[r14],throughput,0.185,0.184,0.252,0.252,0.17,0.13
+Z,ez_tp_b_d8_0,-,[r14+0] disp8,throughput,0.168,0.168,0.252,0.252,0.17,0.14

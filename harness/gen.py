@@ -191,6 +191,10 @@ for kd in KERNELS:
     if kd["exp"] in ("Z", "Z0", "ZI"):
         kd["form"] = re.sub(r"\[(\w+)\+([a-z]\w*)\b(?!\*)", r"[\1+\2*1", kd["form"])
 
+# Extension kernels (names start with "x"): see gen_ext.py
+import gen_ext  # noqa: E402
+gen_ext.add_kernels(lat, k)
+
 SAVED = ["rbx", "rbp", "rdi", "rsi", "r12", "r13", "r14", "r15"]
 INIT = """    xor eax, eax
     mov ecx, 1
