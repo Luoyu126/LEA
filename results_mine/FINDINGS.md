@@ -1,24 +1,24 @@
 # Adding zero to an LEA: does it replicate on Raptor Lake?
 
-An extension of the study in `../README.md` (Abby Xiong and Yunyi Chen), run on a second laptop:
-an **Intel Core i7-13700H (Raptor Lake)** with 6 hyperthreaded P-cores (**Raptor Cove**) and 8
-E-cores (**Gracemont**). The students measured an Intel Core Ultra 9 285H (Arrow Lake: Lion Cove
-P-cores and Skymont E-cores). Gracemont is the E-core generation *before* Skymont.
+An extension of our study in `../README.md`, run on a second laptop (Abby's): an **Intel Core
+i7-13700H (Raptor Lake)** with 6 hyperthreaded P-cores (**Raptor Cove**) and 8 E-cores
+(**Gracemont**). Our first chip was an Intel Core Ultra 9 285H (Arrow Lake: Lion Cove P-cores and
+Skymont E-cores). Gracemont is the E-core generation *before* Skymont.
 
 **Short answer:** yes, it replicates. On Gracemont, `lea rax,[rax+rcx+0]` takes **2 cycles** while
 `lea rax,[rax+rcx]` takes **1**, even though both compute the same thing. On the P-core both take 1.
 So the slowdown **existed before Arrow Lake**, and on Gracemont it is even harsher for throughput.
 It only affects `lea`. Stores, loads and `add rax,[mem]` don't care about a zero displacement.
 
-## How I measured (same method as the students)
+## How we measured (the same method as on the first chip)
 
 - Same harness (`../harness/`), unchanged except for two things. `run_all.py` gained an `--outdir`
   option so nothing in `../results/` gets overwritten. New kernels live in `gen_ext.py`
   (names start with `x`).
 - **Which CPU is which.** `bench list` reports Windows' efficiency class. On this laptop it is the
   reverse of the 285H: **CPUs 0–11 are P-cores** (6 cores × 2 threads; CPUs 0+1 share a core,
-  2+3 share a core, and so on) and **CPUs 12–19 are E-cores**. I used **P = CPU 2 and CPU 8**
-  (two different physical cores, one thread each; I skipped CPU 0 because Windows handles a lot of
+  2+3 share a core, and so on) and **CPUs 12–19 are E-cores**. We used **P = CPU 2 and CPU 8**
+  (two different physical cores, one thread each; we skipped CPU 0 because Windows handles a lot of
   background interrupts there) and **E = CPU 12 and CPU 16** (one from each 4-core E-cluster).
 - Each instruction is repeated in a chain (each one waits for the last), 200 per loop × 200,000
   loops, median of 7 runs. Timer ticks are turned into cycles by comparing with `add rax,rcx`,
@@ -37,7 +37,7 @@ It only affects `lea`. Stores, loads and `add rax,[mem]` don't care about a zero
 Full table for every kernel: `compare_results.csv` and `compare_zero_disp.csv`. Figure:
 `fig_mine_replication.png`.
 
-| `lea` latency (cycles) | my P (Raptor Cove) | my E (Gracemont) | their P (Lion Cove) | their E (Skymont) |
+| `lea` latency (cycles) | 13700H P (Raptor Cove) | 13700H E (Gracemont) | 285H P (Lion Cove) | 285H E (Skymont) |
 |---|---|---|---|---|
 | `[rax+rcx]` | 1 | 1 | 1 | 1 |
 | `[rax+rcx+0]` disp8 / disp32 | 1 | **2** | 1 | **2** |
@@ -48,33 +48,34 @@ Full table for every kernel: `compare_results.csv` and `compare_zero_disp.csv`. 
 | `[rax]`, `[rax+0]` (no index) | **0.17** | 1 | 1 | 1 |
 | `[rax+rcx*4]` | 2 | 1 | 2 | 1 |
 
-| `lea` throughput (cycles per instruction) | my P | my E | their P | their E |
+| `lea` throughput (cycles per instruction) | 13700H P | 13700H E | 285H P | 285H E |
 |---|---|---|---|---|
 | `[r14+r15]` | 0.20 | 0.25 | 0.17 | 0.13 |
 | `[r14+r15+0]` | 0.20 | **1.00** | 0.17 | **0.30** |
 
-**What matched the students:**
-- Their rule holds exactly on Gracemont: **an index and a displacement field encoded together cost a
+**What matched the first chip:**
+- The rule holds exactly on Gracemont: **an index and a displacement field encoded together cost a
   second cycle**, whatever the displacement's value, sign or size, and whatever the index's value.
   It is not about "three parts": `[rax*1+0]` has two parts and is still slow.
 - The P-core shows no `+0` penalty, and pays a cycle for a scale factor (×4, ×8), just like Lion Cove.
 - Splitting a slow `lea` into `lea`+`add` doesn't help on E. Hoisting the constant out of the loop does
   (2 → 1 cycle).
-- All the students' Exp 1 and Exp 3 latencies matched, except the P-core's `[rax]` and `[rax+8]`,
-  which my P-core runs almost for free (next section).
+- All of our Exp 1 and Exp 3 latencies matched, except the P-core's `[rax]` and `[rax+8]`,
+  which Raptor Cove runs almost for free (next section).
 
-**What's different on my chip:**
+**What's different on the second chip:**
 - **Throughput is hit 4× on Gracemont** (0.25 → 1.00): only one such `lea` per cycle, versus 4 per
-  cycle for the fast form. The students' Skymont lost only about 2×. Gracemont looks like their
+  cycle for the fast form. Skymont lost only about 2×. Gracemont looks like the 285H's
   LP E-core (Crestmont) here. Skymont seems to have softened the throughput penalty while keeping
   the latency one.
-- **My P-core does `lea rax,[rax]` and `lea rax,[rax+0]` almost for free** (0.17 cycles, i.e. about 6
+- **Raptor Cove does `lea rax,[rax]` and `lea rax,[rax+0]` almost for free** (0.17 cycles, i.e. about 6
   per cycle). It treats them as "copy plus small constant" and resolves them before execution, the
-  same trick that makes `add rax,1` free. Their Lion Cove did not do this for `lea` (1 cycle). See the
+  same trick that makes `add rax,1` free. Lion Cove did not do this for `lea` (1 cycle). See the
   bonus result below for which constants qualify.
 - Gracemont does *not* fold `add rax,1` (1.0 cycle; Skymont 0.24).
-- Other side differences: load-use latency is 5 cycles on my P-core (4 on theirs). `imul` latency is
-  5 cycles on my E-core (4 on theirs). RIP-relative `lea` on my P-core runs only 1 per cycle (theirs 3).
+- Other side differences: load-use latency is 5 cycles on Raptor Cove (4 on Lion Cove). `imul`
+  latency is 5 cycles on Gracemont (4 on Skymont). RIP-relative `lea` on Raptor Cove runs only
+  1 per cycle (Lion Cove 3).
 
 ## Part 2: new `lea` address modes
 
@@ -95,7 +96,7 @@ Figure: `fig_mine_part2_lea_modes.png`. Data: `extension.csv` (experiments X2A�
 
 \* There is no way to encode "index, no base, no displacement": x86 always adds a 4-byte displacement
 when there is no base. So the "no disp" column is the same-value form `[rax]`.
-\** RIP-relative always carries a 4-byte displacement, so I compared 0 with 64. It also reads no
+\** RIP-relative always carries a 4-byte displacement, so we compared 0 with 64. It also reads no
 register, so you can't chain it to measure latency; only throughput is possible.
 
 **What's new:**
@@ -107,7 +108,7 @@ register, so you can't chain it to measure latency; only throughput is possible.
   2 cycles on the P-core and about 3.6 on Gracemont for *every* form. On Gracemont its throughput is
   also about 3.6 cycles per instruction, even with 8 independent chains. That suggests 16-bit `lea`
   goes down a separate slow path on that core, possibly microcode. Writing a 16-bit register has to
-  merge with the old upper bits, which costs extra. I can't tell the exact mechanism from timing
+  merge with the old upper bits, which costs extra. We can't tell the exact mechanism from timing
   alone. (Part 4's counters later confirmed it: about 3 micro-ops on Gracemont, mostly from
   microcode, and 2 micro-ops without microcode on the P-core.)
 - **0x67 switches off the P-core's free `lea`.** `lea rax,[rax]` is 0.17 cycles, but `lea rax,[eax]`
@@ -124,7 +125,7 @@ register, so you can't chain it to measure latency; only throughput is possible.
 
 `lea` and `add` behave identically. Whether the constant is stored in 1 or 4 bytes doesn't matter;
 only its **value** does. Anything in −1024…1023 gets the shortcut, and bigger steps within that
-range cost more (my guess: a small running-offset counter at rename overflows sooner). This is the
+range cost more (our guess: a small running-offset counter at rename overflows sooner). This is the
 opposite of the E-core effect, which depends on the **encoding** and not the value.
 
 ## Part 3: other instructions with and without a zero displacement
@@ -142,12 +143,12 @@ Figure: `fig_mine_part3_other_instrs.png`. Data: `extension.csv` (experiments X3
 | `add r,[r10+r8]`, throughput | 0.50 | 0.50 | 0.50 | 0.50 |
 | store→load pair `[rdi+r8]` | 5.0 | 5.0 | ~4.6 | ~4.8 |
 
-I also tested base only, `+0` as disp8 or disp32, scaled `*8`, and index only: same picture.
+We also tested base only, `+0` as disp8 or disp32, scaled `*8`, and index only: same picture.
 
 **What's new:**
 - **A zero displacement costs nothing for real memory instructions on either core.** Stores, loads
   (latency *and* throughput) and `add` with a memory operand are identical with and without `+0`.
-  Only `lea` has the penalty. This confirms the students' point that `lea` timing tells you nothing
+  Only `lea` has the penalty. This confirms our earlier point that `lea` timing tells you nothing
   about memory-address cost, and now it holds for throughput and stores too.
 - **Gracemont's 3-cycle fast load path depends on the index, not the displacement.** `[rax]`,
   `[rax+0]` (even as disp32) and `[rax+8]` load in 3 cycles. Anything with an index (including
@@ -160,9 +161,9 @@ I also tested base only, `+0` as disp8 or disp32, scaled `*8`, and index only: s
   store. With `[rdi+r8]` it costs the normal ~5. Index-only `[rdi*1+0]` gets the shortcut on
   Gracemont (0.6) but not on Raptor Cove (5.0). Again the displacement doesn't matter, only the base
   and index. The E-core `[rdi+r8]` numbers are noisy (±30–50% between runs).
-- **Open question:** my P-core does only 2 loads per cycle in these tests. Intel documents 3 for
-  Raptor Cove. Loads to 8 different cache lines and 32-bit loads give the same 0.50
-  (`extension_loadcheck.csv`), so the cause isn't the shared address. I couldn't find the reason
+- **Open question:** Raptor Cove does only 2 loads per cycle in these tests, where Intel documents 3.
+  Loads to 8 different cache lines and 32-bit loads give the same 0.50
+  (`extension_loadcheck.csv`), so the cause isn't the shared address. We couldn't find the reason
   from timing alone. It doesn't affect the with/without comparison.
 
 ## Part 4: micro-op counts (VTune)
@@ -172,8 +173,8 @@ takes 1. Is the slow form **split into two micro-ops**, or is it **one micro-op 
 cycles**? Timing alone can't tell these apart. A micro-op counter can.
 
 **The tool.** Intel VTune 2026.6, in *counting mode*: it reads the CPU's built-in event counters
-during the run. It needs administrator rights, so the script was started through a UAC prompt.
-No Windows security settings were changed. The self-checker complained about a "virtual machine"
+during the run. It needs administrator rights, so we started the script through a UAC prompt.
+We changed no Windows security settings. The self-checker complained about a "virtual machine"
 (Windows' hypervisor is running, probably for WSL2 or Docker), but counting worked anyway.
 
 **What was counted.** The two core types have different counter names:
@@ -260,8 +261,8 @@ python ..\results_mine\scripts\uops_table.py
 | file | what it is |
 |---|---|
 | `FINDINGS.md` | this write-up |
-| `results.csv`, `zero_disp.csv` | Part 1: the students' experiments on CPUs 2, 8 (P) and 12, 16 (E) |
-| `compare_results.csv`, `compare_zero_disp.csv` | Part 1 side by side with the students' numbers |
+| `results.csv`, `zero_disp.csv` | Part 1: our original experiments re-run on CPUs 2, 8 (P) and 12, 16 (E) |
+| `compare_results.csv`, `compare_zero_disp.csv` | Part 1 side by side with the 285H numbers |
 | `extension.csv`, `extension_loadcheck.csv` | Parts 2 and 3 |
 | `encodings.txt` | disassembly of every new kernel, proving the bytes match the labels |
 | `fig_mine_*.png` | the three figures |
