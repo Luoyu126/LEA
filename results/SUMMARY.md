@@ -41,9 +41,12 @@ What this shows:
   SIB byte instead) are fast.
 - The P-core (Lion Cove) shows no effect at all → it depends on the microarchitecture.
 - Consistent with uops.info: ARL-E / MTL-E list base+index+disp8 at 2 cycles; ARL-P at 1.
-- Mechanism (hypothesis, not observable without uop/port counters): on Skymont/Crestmont the index
-  input and the displacement cannot be combined in a single step, so that combination takes a second
-  step (or a restricted unit), and the decoder picks that path from the encoding alone.
+- Mechanism (hypothesis): on Skymont/Crestmont the index input and the displacement cannot be
+  combined in a single step, so that combination takes a second step (or a restricted unit), and the
+  decoder picks that path from the encoding alone. **Micro-op counters narrow this down**: on
+  Gracemont the slow form is 1.0 micro-op that takes 2 cycles, not two micro-ops, so the second step
+  happens inside one micro-op (`results_mine/FINDINGS.md`, Part 4). How the adder is built is still
+  not observable — that needs port-level counters, which Windows does not expose.
 
 ## Setup
 

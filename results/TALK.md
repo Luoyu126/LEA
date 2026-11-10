@@ -4,14 +4,15 @@ Figure: `fig_zero_disp_simple.png`. Data: `zero_disp.csv`.
 
 ## The result
 
-|  | P-core | E-core | LP E-core |
-|---|---|---|---|
-| `lea rax,[rax+rcx*1]` | 1 | 1 | 1 |
-| `lea rax,[rax+rcx*1+0]` (1-byte or 4-byte zero) | 1 | **2** | **2** |
+| | P-core | E-core | LP E-core | P-core (2nd chip) | E-core (2nd chip) |
+|---|---|---|---|---|---|
+| `lea rax,[rax+rcx*1]` | 1 | 1 | 1 | 1 | 1 |
+| `lea rax,[rax+rcx*1+0]` (1-byte or 4-byte zero) | 1 | **2** | **2** | 1 | **2** |
 
 Latency in cycles. The two instructions are functionally identical: same registers, same result.
 The only difference is an encoded displacement of zero. Measured on an Intel Core Ultra 9 285H
-(Arrow Lake), which has all three core types on one chip.
+(Arrow Lake: Lion Cove, Skymont, Crestmont), which has all three core types on one chip, and
+replicated on an i7-13700H (Raptor Lake: Raptor Cove and Gracemont, one E-core generation older).
 
 ### Every base / index / disp combination (scale 1), all computing exactly `rax`
 
@@ -73,10 +74,19 @@ change to an addressing mode that still costs time?
 - It isn't the `*1` either: `[rax+rcx*1]` has the same index×1 and is fast. Even a real scale
   costs no latency on E-cores (`[rax+rcx*4]` = 1 cycle), only throughput (1 per cycle).
 - Possible reading (hypothesis): on E-cores the index input and the displacement don't share a
-  single-step path, so combining them takes a second step. We can't tell whether that step is a
-  second micro-op or one micro-op that takes 2 cycles; timing alone predicts 2 cycles for both.
+  single-step path, so combining them takes a second step. **Micro-op counters say that step is not
+  a second micro-op**: on Gracemont the slow form is 1.0 micro-op and still takes 2 cycles, so the
+  extra cycle happens inside one micro-op (Abby's extension, Part 4 — VTune, with `add rax,rcx` as
+  a known 1-micro-op control).
 - This also explains a textbook rule: "LEA with RBP as the base is slow." x86 cannot encode
   `[rbp+rax*1]` without a displacement byte, so it is always secretly `[rbp+rax*1+0]`.
+- **It replicates on a second chip, one generation older.** On an i7-13700H (Gracemont E-core) the
+  same rule holds exactly, and the throughput penalty is worse: 4 per cycle → 1 per cycle (4×),
+  against about 2× on Skymont. So the quirk predates Arrow Lake, and Skymont softened the
+  throughput cost while keeping the latency cost.
+- **Only LEA pays.** With the same address, loads, stores and `add rax,[mem]` are identical with
+  and without `+0` — in latency *and* throughput, on both cores. The address arithmetic is free when
+  the load unit's own adder does it; only the ALU charges for it.
 
 ## 4. Alternate hypotheses (1:00)
 
@@ -89,15 +99,21 @@ change to an addressing mode that still costs time?
 | Noise | 7 repetitions, 2 different CPUs per core type, agreement within 6%. |
 | P/E cores mixed | Each run is pinned to one logical CPU. |
 | A bug in our harness | Same numbers as uops.info (ARL-E / MTL-E: 2 cycles, ARL-P: 1 cycle). |
+| Something about this one chip | Replicated on a second laptop (i7-13700H, Gracemont): same rule, same numbers. |
+| The 64-bit adder width | The `0x67` prefix (32-bit addressing) and a 32-bit destination still pay. |
 
 ## 5. Takeaway (0:30)
 
-A displacement of zero is not free. On Intel E-cores, any LEA with both an index and a
-displacement takes 2 cycles instead of 1, whatever their values, even when the result is just
-`rax`. The P-core on the same chip doesn't care. Same chip, same instruction, different answer.
+A displacement of zero is not free. On two generations of Intel E-cores, any LEA with both an index
+and a displacement takes 2 cycles instead of 1, whatever their values, even when the result is just
+`rax`. The P-cores don't care, and neither do real loads and stores with the same address.
+Same chip, same instruction, different answer.
 
-Limitation: the internal mechanism (why index + displacement is slower on E-cores) is a
-hypothesis. Windows exposes no per-port counters, so we can't see inside the core.
+Limitation: we know the slow form is **one micro-op that takes two cycles**, not two micro-ops, but
+*why* that micro-op needs a second cycle is still our hypothesis. Micro-op counters can't show how
+the adder is built, and there are no per-port counters on Windows, so we can't see inside the core.
+Still open: on the i7-13700H the P-core did only 2 loads per cycle where Intel documents 3, and we
+don't know why.
 
 ## Backup slide — "one cycle, who cares?"
 
@@ -127,3 +143,24 @@ Three things to say:
 
 So: it costs a cycle only when scaled address arithmetic sits on a loop-carried chain. Narrow
 window — but gcc walks into it, `-march=gracemont` included.
+
+## The deck's other backup slides (extension, i7-13700H)
+
+Full write-up and caveats: `results_mine/FINDINGS.md`. One line each, for questions:
+
+- **`bk_uops` — micro-op counts.** `lea rax,[rax+rcx+0]` on Gracemont: 1.0 micro-op, 2 cycles.
+  Control `add rax,rcx` came out at 1.0 as it must. 16-bit `lea ax,...` is a different animal:
+  ≈3 micro-ops on Gracemont, ≈2 of them from the microcode ROM, and 2 micro-ops (no microcode)
+  on the P-core. If pressed on precision: the E-core rounds scatter about ±0.1–0.2 and background
+  work on the pinned CPU leaks in, so the second decimal means nothing — but no round came near 2,
+  which is all the 1-vs-2 question needs.
+- **`bk_modes` — prefixes and operand sizes.** The rule survives the `0x67` prefix (32-bit
+  addressing) and a 32-bit destination, so it is not about the 64-bit adder width. RIP-relative is
+  unaffected by its displacement value. A 16-bit destination is slow for *every* form (2 cycles on
+  the P-core, ≈3.6 on Gracemont) and so masks the `+0` effect entirely.
+- **`bk_fold` — the opposite effect on the other core.** The Raptor Cove P-core adds a small
+  constant almost for free: `lea rax,[rax+k]` and `add rax,k` both run at 0.17 cycles for k = 0, ±1,
+  rising to 1.00 from k = 1024 on. Only the **value** matters, not disp8 vs disp32 — the exact
+  mirror image of the E-core effect, which depends on the **encoding** and ignores the value.
+  Lion Cove on the 285H does not do this for `lea`. This is the cleanest one-slide way to say
+  "one core reads the value, the other reads the form."

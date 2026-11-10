@@ -120,8 +120,10 @@ index + displacement on its own; the two-part `[rax*1+0]` is still slow, which r
 
 - Cycles are rdtsc-calibrated, not read from a core-cycle counter (Windows has one via ETW, but it needs
   admin rights).
-- Windows exposes no per-port or micro-op counters, so the adder model is inferred from timing. Timing
-  can't tell whether the E-core's second step is a second micro-op or one 2-cycle micro-op.
+- Windows exposes no per-port counters, so the adder model is inferred from timing. Micro-op counts
+  did settle one half of it: the slow E-core form is one micro-op that takes 2 cycles, not two
+  micro-ops (`results_mine/FINDINGS.md`, Part 4, measured with VTune on a second chip). Why that
+  micro-op needs a second cycle remains a hypothesis.
 - The LP E-core being Crestmont is inferred from its match with uops.info's Meteor Lake-E rows.
 
 ## Repository structure
